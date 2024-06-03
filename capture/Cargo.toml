@@ -1,0 +1,6 @@
+[package]
+name = "capture"
+
+[[bin]]
+name = "capture"
+path = "capture.rs"
