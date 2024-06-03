@@ -1,0 +1,6 @@
+[package]
+name = "ownership"
+
+[[bin]]
+name = "ownership"
+path = "ownership.rs"
