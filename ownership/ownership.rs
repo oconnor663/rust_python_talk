@@ -12,7 +12,7 @@ fn main() {
     let mut v = Vec::new();
     assert_eq!(v.len(), 0);
     let thread = thread::spawn(|| background_work(v));
-    // OOPS: swap these two lines
-    v = thread.join().unwrap();
+    // OOPS: I swapped these two lines.
     assert_eq!(v.len(), 1);
+    v = thread.join().unwrap();
 }

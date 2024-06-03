@@ -12,8 +12,8 @@ def main():
     assert len(v) == 0
     thread = threading.Thread(target=background_work, args=[v])
     thread.start()
-    # OOPS: swap these two lines
-    thread.join()
+    # OOPS: I swapped these two lines.
     assert 42 in v
+    thread.join()
 
 main()
