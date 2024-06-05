@@ -1,0 +1,6 @@
+[package]
+name = "million"
+
+[[bin]]
+name = "million"
+path = "million.rs"
