@@ -1,6 +1,0 @@
-[package]
-name = "aliasing"
-
-[[bin]]
-name = "alising"
-path = "aliasing.rs"

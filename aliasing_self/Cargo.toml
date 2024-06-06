@@ -1,0 +1,6 @@
+[package]
+name = "aliasing_self"
+
+[[bin]]
+name = "aliasing_self"
+path = "aliasing_self.rs"
