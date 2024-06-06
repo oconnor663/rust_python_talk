@@ -1,5 +1,6 @@
 [package]
 name = "aliasing"
 
-[lib]
+[[bin]]
+name = "alising"
 path = "aliasing.rs"

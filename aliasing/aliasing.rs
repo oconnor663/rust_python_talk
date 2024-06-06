@@ -9,8 +9,7 @@ impl NumberList {
     }
 }
 
-#[test]
-fn test_take_all() {
+fn main() {
     let mut list_a = NumberList {
         numbers: vec![1, 2, 3],
     };
