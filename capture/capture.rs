@@ -1,8 +1,11 @@
 fn main() {
     let mut functions = Vec::new();
+
     for i in 0..10 {
-        functions.push(|| i + 1);
+        functions.push(move || println!("{i}"));
     }
-    let results: Vec<i32> = functions.iter().map(|f| f()).collect();
-    println!("{:?}", results);
+
+    for f in functions {
+        f();
+    }
 }
