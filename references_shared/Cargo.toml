@@ -1,6 +1,0 @@
-[package]
-name = "references_shared"
-
-[[bin]]
-name = "references_shared"
-path = "references_shared.rs"

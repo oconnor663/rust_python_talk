@@ -1,6 +1,0 @@
-[package]
-name = "references"
-
-[[bin]]
-name = "references"
-path = "references.rs"

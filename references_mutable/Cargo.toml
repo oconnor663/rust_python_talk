@@ -1,6 +1,0 @@
-[package]
-name = "references_mutable"
-
-[[bin]]
-name = "references_mutable"
-path = "references_mutable.rs"

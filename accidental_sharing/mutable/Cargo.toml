@@ -1,0 +1,6 @@
+[package]
+name = "accidental_sharing"
+
+[[bin]]
+name = "accidental_sharing"
+path = "accidental_sharing.rs"
