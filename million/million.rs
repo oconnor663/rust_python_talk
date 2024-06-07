@@ -1,13 +1,10 @@
-use std::ops::DerefMut;
 use std::sync::Mutex;
 
 static X: Mutex<i32> = Mutex::new(0);
 
 fn add_500k() {
     for _ in 0..500_000 {
-        let mut guard = X.lock().unwrap();
-        let x: &mut i32 = guard.deref_mut();
-        *x += 1;
+        *X.lock().unwrap() += 1
     }
 }
 
