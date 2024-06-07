@@ -1,15 +1,15 @@
 class Person:
     def __init__(self, numbers):
-        self.favorite_numbers = numbers
+        self.favorite_foods = numbers
 
-default_numbers = [42]
+default_numbers = ["donuts"]
 
-william = Person(default_numbers)
-william.favorite_numbers.append(1066)
+alice = Person(default_numbers)
+alice.favorite_foods.append("apples")
 
-# OOPS: William and George are both referencing the same list.
-george = Person(default_numbers)
-george.favorite_numbers.append(1776)
+# OOPS: Alice and Bob are both referencing the same list.
+bob = Person(default_numbers)
+bob.favorite_foods.append("bananas")
 
-print("william:", william.favorite_numbers);
-print("george:", george.favorite_numbers);
+print("alice:", alice.favorite_foods);
+print("bob:", bob.favorite_foods);

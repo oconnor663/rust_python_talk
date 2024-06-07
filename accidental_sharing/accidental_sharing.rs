@@ -1,20 +1,20 @@
 pub struct Person {
-    pub favorite_numbers: Vec<i32>,
+    pub favorite_foods: Vec<String>,
 }
 
 fn main() {
-    let default_numbers = vec![42];
+    let default_foods = vec!["donuts".into()];
 
-    let mut william = Person {
-        favorite_numbers: default_numbers.clone(),
+    let mut alice = Person {
+        favorite_foods: default_foods,
     };
-    william.favorite_numbers.push(1066);
+    alice.favorite_foods.push("apples".into());
 
-    let mut george = Person {
-        favorite_numbers: default_numbers,
+    let mut bob = Person {
+        favorite_foods: default_foods,
     };
-    george.favorite_numbers.push(1776);
+    bob.favorite_foods.push("bananas".into());
 
-    println!("william: {:?}", william.favorite_numbers);
-    println!("george: {:?}", george.favorite_numbers);
+    println!("alice: {:?}", alice.favorite_foods);
+    println!("bob: {:?}", bob.favorite_foods);
 }
