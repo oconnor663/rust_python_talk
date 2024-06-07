@@ -8,6 +8,7 @@ fn main() {
     let alice = Person {
         favorite_foods: &default_foods,
     };
+    // OOPS: We can't mutate the list through a shared reference.
     alice.favorite_foods.push("apples".into());
 
     let bob = Person {

@@ -11,6 +11,7 @@ fn main() {
     alice.favorite_foods.push("apples".into());
 
     let mut bob = Person {
+        // OOPS: Alice took ownership of this list.
         favorite_foods: default_foods,
     };
     bob.favorite_foods.push("bananas".into());

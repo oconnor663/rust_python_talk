@@ -11,6 +11,7 @@ fn main() {
     alice.favorite_foods.push("apples".into());
 
     let bob = Person {
+        // OOPS: We can't take two mutable references to the same list.
         favorite_foods: &mut default_foods,
     };
     bob.favorite_foods.push("bananas".into());
