@@ -1,3 +1,5 @@
+from secrets import randbits
+
 class Mess:
     def __init__(self, size):
         print(f"Make a {size} mess.")
@@ -15,6 +17,15 @@ class Mess:
     def __exit__(self, *_):
         self.cleanup()
 
+def random_mess(mess1, mess2):
+    if randbits(1):
+        mess2.cleanup()
+        return mess1
+    else:
+        mess1.cleanup()
+        return mess2
 
-with Mess("giant") as giant_mess:
-    giant_mess.look()
+mess1 = Mess("first")
+mess2 = Mess("second")
+with random_mess(mess1, mess2) as mess:
+    mess.look()

@@ -19,7 +19,17 @@ impl Drop for Mess {
     }
 }
 
+fn random_mess(mess1: Mess, mess2: Mess) -> Mess {
+    if rand::random() {
+        mess1
+    } else {
+        mess2
+    }
+}
+
 fn main() {
-    let giant_mess = Mess::new("giant".into());
-    giant_mess.look();
+    let mess1 = Mess::new("first".into());
+    let mess2 = Mess::new("second".into());
+    let mess = random_mess();
+    mess.look()
 }
