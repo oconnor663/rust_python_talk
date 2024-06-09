@@ -1,0 +1,6 @@
+[package]
+name = "none"
+
+[[bin]]
+name = "none"
+path = "none.rs"
