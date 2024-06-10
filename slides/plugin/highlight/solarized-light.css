@@ -49,12 +49,6 @@ code.hljs {
   background: #fdf6e3;
 }
 
-.hljs::selection,
-.hljs ::selection {
-  background-color: #93a1a1;
-  color: #586e75;
-}
-
 
 /* purposely do not highlight these things */
 .hljs-formula,
