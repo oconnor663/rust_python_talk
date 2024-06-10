@@ -8,16 +8,35 @@
 
 		<link rel="stylesheet" href="dist/reset.css">
 		<link rel="stylesheet" href="dist/reveal.css">
-		<link rel="stylesheet" href="dist/theme/black.css">
+		<link rel="stylesheet" href="dist/theme/solarized.css">
 
 		<!-- Theme used for syntax highlighted code -->
-		<link rel="stylesheet" href="plugin/highlight/monokai.css">
+		<link rel="stylesheet" href="plugin/highlight/solarized-light.css">
 	</head>
 	<body>
 		<div class="reveal">
 			<div class="slides">
-				<section>Slide 1</section>
-				<section>Slide 2</section>
+
+<section>
+Slide 1
+<pre><code class="hljs rust" data-trim><script type="text/template">
+fn main() -> io::Result<()> {
+    let path = std::env::args().nth(1);
+    let mut output = ScreamingOutput::new(path)?;
+    output.write("hello world\n")?;
+    Ok(())
+}
+</script></code></pre>
+</section>
+
+<section>
+Slide 2
+<pre><code class="hljs python" data-trim><script type="text/template">
+path = sys.argv[1] if len(sys.argv) > 1 else None
+output = ScreamingOutput(path)
+output.write("hello world\n")
+</script></code></pre>
+</section>
 			</div>
 		</div>
 
@@ -31,6 +50,7 @@
 			// - https://revealjs.com/config/
 			Reveal.initialize({
 				hash: true,
+				view: "scroll",
 
 				// Learn about plugins: https://revealjs.com/plugins/
 				plugins: [ RevealMarkdown, RevealHighlight, RevealNotes ]
