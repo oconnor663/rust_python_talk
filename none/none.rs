@@ -7,13 +7,13 @@ enum Output {
 }
 
 impl Output {
-    fn new() -> io::Result<Output> {
-        let args: Vec<String> = std::env::args().collect();
-        if args.len() > 1 {
-            let file = std::fs::File::create(&args[1])?;
-            Ok(Output::File { file })
-        } else {
-            Ok(Output::Stdout)
+    fn new(maybe_path: Option<String>) -> io::Result<Output> {
+        match maybe_path {
+            Some(path) => {
+                let file = std::fs::File::create(path)?;
+                Ok(Output::File { file })
+            }
+            None => Ok(Output::Stdout),
         }
     }
 
@@ -26,7 +26,8 @@ impl Output {
 }
 
 fn main() -> io::Result<()> {
-    let mut output = Output::new()?;
+    let path = std::env::args().nth(1);
+    let mut output = Output::new(path)?;
     output.write("hello world\n")?;
     Ok(())
 }

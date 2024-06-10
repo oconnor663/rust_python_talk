@@ -1,9 +1,9 @@
 import sys
 
 class Output:
-    def __init__(self):
-        if len(sys.argv) > 1:
-            self.file = open(sys.argv[1], "w")
+    def __init__(self, maybe_path):
+        if maybe_path:
+            self.file = open(maybe_path, "w")
         else:
             self.file = None
 
@@ -16,6 +16,7 @@ class Output:
     def close(self):
         self.file.close()
 
-output = Output()
+path = sys.argv[1] if len(sys.argv) > 1 else None
+output = Output(path)
 output.write("hello world\n")
 output.close()
