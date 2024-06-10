@@ -12,14 +12,48 @@
 
 		<!-- Theme used for syntax highlighted code -->
 		<link rel="stylesheet" href="plugin/highlight/solarized-light.css">
+
+		<style>
+		.hljs-ln-numbers {
+			display: none;
+		}
+        </style>
 	</head>
 	<body>
 		<div class="reveal">
 			<div class="slides">
 
 <section>
-Slide 1
-<pre><code class="hljs rust" data-trim><script type="text/template">
+Rust code
+<pre><code class="hljs rust" data-trim data-line-numbers="|4-7"><script type="text/template">
+use std::io;
+use std::io::prelude::*;
+
+enum ScreamingOutput {
+    File { file: std::fs::File },
+    Stdout,
+}
+
+impl ScreamingOutput {
+    fn new(maybe_path: Option<String>) -> io::Result<ScreamingOutput> {
+        match maybe_path {
+            Some(path) => {
+                let file = std::fs::File::create(path)?;
+                Ok(ScreamingOutput::File { file })
+            }
+            None => Ok(ScreamingOutput::Stdout),
+        }
+    }
+
+    fn write(&mut self, string: &str) -> io::Result<()> {
+        let all_caps = string.to_uppercase();
+        match self {
+            ScreamingOutput::File { file } => file.write_all(all_caps.as_bytes()),
+            ScreamingOutput::Stdout => std::io::stdout().write_all(all_caps.as_bytes()),
+        }
+    }
+}
+
 fn main() -> io::Result<()> {
     let path = std::env::args().nth(1);
     let mut output = ScreamingOutput::new(path)?;
@@ -30,8 +64,24 @@ fn main() -> io::Result<()> {
 </section>
 
 <section>
-Slide 2
-<pre><code class="hljs python" data-trim><script type="text/template">
+Python code
+<pre><code class="hljs python" data-trim data-line-numbers="|4-8|10-15"><script type="text/template">
+import sys
+
+class ScreamingOutput:
+    def __init__(self, maybe_path):
+        if maybe_path:
+            self.file = open(maybe_path, "w")
+        else:
+            self.file = None
+
+    def write(self, string):
+        all_caps = string.upper()
+        if self.file:
+            return self.file.write(all_caps)
+        else:
+            return sys.stdout.write(all_caps)
+
 path = sys.argv[1] if len(sys.argv) > 1 else None
 output = ScreamingOutput(path)
 output.write("hello world\n")
