@@ -33,6 +33,13 @@
             background-color: #eee8d5;
             padding: 20px;
             border-radius: 20px;
+            font-size: 30pt !important;
+        }
+
+        .scrollable {
+            box-sizing: border-box;
+            font-size: 50pt;
+            height: 100vh;
         }
 
         </style>
@@ -43,8 +50,8 @@
 
 
 <section><!---------------------------------- SLIDE ----------------------------------------------->
-<div class="columns" style="font-size: 160%">
-<pre><code class="hljs python" data-trim data-line-numbers="|3-7,11-16|9,18-23"><script type="text/template">
+<div class="columns">
+<pre><code style="font-size: 30pt" class="hljs python" data-trim><script type="text/template">
 import sys
 
 def main():
@@ -85,8 +92,39 @@ HELLO WORLD
 
 
 <section><!---------------------------------- SLIDE ----------------------------------------------->
-<div class="columns" style="font-size: 130%">
-<pre><code class="hljs rust" data-trim data-line-numbers="|5-6,11-14,17-25|7,27-37"><script type="text/template">
+<pre><code class="hljs python scrollable" data-trim data-line-numbers="3-9|12-16|18-23"><script type="text/template">
+import sys
+
+def main():
+    if len(sys.argv) > 1:
+        output = ScreamingOutput(sys.argv[1])
+    else:
+        output = ScreamingOutput()
+
+    output.write("hello world\n")
+
+class ScreamingOutput:
+    def __init__(self, path=None):
+        if path is not None:
+            self.file = open(path, "w")
+        else:
+            self.file = None
+
+    def write(self, string):
+        all_caps = string.upper()
+        if self.file:
+            return self.file.write(all_caps)
+        else:
+            return sys.stdout.write(all_caps)
+
+main()
+</script></code></pre>
+</section>
+
+
+<section><!---------------------------------- SLIDE ----------------------------------------------->
+<div class="columns">
+<pre><code style="font-size: 22pt; margin-right: -300px" class="hljs rust" data-trim><script type="text/template">
 use std::io;
 use std::io::prelude::*;
 
@@ -132,6 +170,50 @@ $ cat /tmp/out
 HELLO WORLD
 </pre>
 </div>
+</section>
+
+
+<section><!---------------------------------- SLIDE ----------------------------------------------->
+<pre><code class="hljs rust scrollable" data-trim data-line-numbers="11-14|17-25|27-37"><script type="text/template">
+use std::io;
+use std::io::prelude::*;
+
+fn main() -> io::Result<()> {
+    let path = std::env::args().nth(1);
+    let mut output = ScreamingOutput::new(path)?;
+    output.write("hello world\n")?;
+    Ok(())
+}
+
+enum ScreamingOutput {
+    File { file: std::fs::File },
+    Stdout,
+}
+
+impl ScreamingOutput {
+    fn new(maybe_path: Option<String>) -> io::Result<ScreamingOutput> {
+        match maybe_path {
+            Some(path) => {
+                let file = std::fs::File::create(path)?;
+                Ok(ScreamingOutput::File { file })
+            }
+            None => Ok(ScreamingOutput::Stdout),
+        }
+    }
+
+    fn write(&mut self, string: &str) -> io::Result<()> {
+        let all_caps = string.to_uppercase();
+        match self {
+            ScreamingOutput::File { file } => {
+                file.write_all(all_caps.as_bytes())
+            }
+            ScreamingOutput::Stdout => {
+                std::io::stdout().write_all(all_caps.as_bytes())
+            }
+        }
+    }
+}
+</script></code></pre>
 </section>
 
 
