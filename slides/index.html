@@ -29,7 +29,7 @@
             align-items: center;
         }
 
-        .output {
+        .terminal {
             background-color: #eee8d5;
             padding: 20px;
             border-radius: 20px;
@@ -43,10 +43,17 @@
 
 
 <section><!---------------------------------- SLIDE ----------------------------------------------->
-Python code
 <div class="columns" style="font-size: 160%">
-<pre><code class="hljs python" data-trim data-line-numbers="|4-8|10-15"><script type="text/template">
+<pre><code class="hljs python" data-trim data-line-numbers="|3-7,11-16|9,18-23"><script type="text/template">
 import sys
+
+def main():
+    if len(sys.argv) > 1:
+        output = ScreamingOutput(sys.argv[1])
+    else:
+        output = ScreamingOutput()
+
+    output.write("hello world\n")
 
 class ScreamingOutput:
     def __init__(self, path=None):
@@ -62,15 +69,15 @@ class ScreamingOutput:
         else:
             return sys.stdout.write(all_caps)
 
-if len(sys.argv) > 1:
-    output = ScreamingOutput(sys.argv[1])
-else:
-    output = ScreamingOutput()
-
-output.write("hello world\n")
+main()
 </script></code></pre>
-<pre class="output">
-$ python none.py
+
+<pre class="terminal">
+$ python3 scream1.py
+HELLO WORLD
+
+$ python3 scream1.py /tmp/out
+$ cat /tmp/out
 HELLO WORLD
 </pre>
 </div>
@@ -78,10 +85,17 @@ HELLO WORLD
 
 
 <section><!---------------------------------- SLIDE ----------------------------------------------->
-Rust code
-<pre><code class="hljs rust" data-trim data-line-numbers="|4-7"><script type="text/template">
+<div class="columns" style="font-size: 130%">
+<pre><code class="hljs rust" data-trim data-line-numbers="|5-6,11-14,17-25|7,27-37"><script type="text/template">
 use std::io;
 use std::io::prelude::*;
+
+fn main() -> io::Result<()> {
+    let path = std::env::args().nth(1);
+    let mut output = ScreamingOutput::new(path)?;
+    output.write("hello world\n")?;
+    Ok(())
+}
 
 enum ScreamingOutput {
     File { file: std::fs::File },
@@ -107,14 +121,17 @@ impl ScreamingOutput {
         }
     }
 }
-
-fn main() -> io::Result<()> {
-    let path = std::env::args().nth(1);
-    let mut output = ScreamingOutput::new(path)?;
-    output.write("hello world\n")?;
-    Ok(())
-}
 </script></code></pre>
+
+<pre class="terminal">
+$ cargo run --quiet
+HELLO WORLD
+
+$ cargo run --quiet -- /tmp/out
+$ cat /tmp/out
+HELLO WORLD
+</pre>
+</div>
 </section>
 
 
