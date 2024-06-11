@@ -1,9 +1,9 @@
 import sys
 
 class ScreamingOutput:
-    def __init__(self, maybe_path):
-        if maybe_path:
-            self.file = open(maybe_path, "w")
+    def __init__(self, path=None):
+        if path is not None:
+            self.file = open(path, "w")
         else:
             self.file = None
 
@@ -14,6 +14,9 @@ class ScreamingOutput:
         else:
             return sys.stdout.write(all_caps)
 
-path = sys.argv[1] if len(sys.argv) > 1 else None
-output = ScreamingOutput(path)
+if len(sys.argv) > 1:
+    output = ScreamingOutput(sys.argv[1])
+else:
+    output = ScreamingOutput()
+
 output.write("hello world\n")
