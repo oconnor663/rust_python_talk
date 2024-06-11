@@ -207,7 +207,6 @@ html * {
   display: block;
   position: relative;
   text-align: left;
-  font-size: 0.55em;
   font-family: var(--r-code-font);
   word-wrap: break-word;
 }

@@ -33,7 +33,7 @@
             background-color: #eee8d5;
             padding: 20px;
             border-radius: 20px;
-            font-size: 30pt !important;
+            font-size: 30pt;
         }
 
         .scrollable {
@@ -214,6 +214,48 @@ impl ScreamingOutput {
     }
 }
 </script></code></pre>
+</section>
+
+
+<section><!---------------------------------- SLIDE ----------------------------------------------->
+<div class="columns">
+<pre><code style="font-size: 30pt" class="hljs diff" data-trim><script type="text/template">
+diff --git a/scream1.py b/scream1.py
+index 4da0502..0f05f37 100644
+--- a/scream1.py
++++ b/scream1.py
+@@ -7,6 +7,7 @@ def main():
+         output = ScreamingOutput()
+ 
+     output.write("hello world\n")
++    output.close()
+ 
+ class ScreamingOutput:
+     def __init__(self, path=None):
+@@ -22,4 +23,7 @@ class ScreamingOutput:
+         else:
+             return sys.stdout.write(all_caps)
+ 
++    def close(self):
++        self.file.close()
++
+ main()
+</script></code></pre>
+
+<pre class="terminal" style="font-size: 20pt">
+$ python scream1.py
+HELLO WORLD
+Traceback (most recent call last):
+  File "/home/jacko/why_rust/scream1.py", line 29, in <module>
+    main()
+  File "/home/jacko/why_rust/scream1.py", line 10, in main
+    output.close()
+  File "/home/jacko/why_rust/scream1.py", line 27, in close
+    self.file.close()
+    ^^^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'close'
+</pre>
+</div>
 </section>
 
 
