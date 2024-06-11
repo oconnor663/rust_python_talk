@@ -1,0 +1,82 @@
+Enums
+  Option
+    No null
+  Result
+    No dropped errors
+References
+  Iterators
+    no invalidation COMMONBUG
+    APIs are less leaky
+  Closures
+    are more explicit about what they capture
+    capturing the iteration variable in a loop COMMONBUG
+Threading?
+  Mutex
+Cargo?
+- tests run in parallel
+slices?
+destructors and moves
+- ownership in channels
+
+features short list
+- destructors
+- enums
+- slices
+- ownership
+    - channels (or just thread spawn)
+- shared references
+    - can't be null
+    - can't be retained
+    - can't be changed out from under you
+- mut references
+    - can't be aliased
+
+bugs list
+- null pointer deref
+- iterator invalidation
+- unintentional capture
+- forgetting the mutex
+- spooky action at a distance
+
+Functional languages
+- no mutability
+- declarative, don't worry about how the computation is performed 
+- easy to reason about, no spooky action at a distance
+Rust
+- mutability xor aliasing
+- precise control over how computation is performed
+- easy to reason about, no spooky action at a distance
+
+Signatures of Vec::last and Vec::pop
+
+Why are strings immutable everywhere?
+
+bugs that are hard to write in Rust
+- null pointer
+    - enums
+- accidental shared state
+- iterator invalidation 
+- surprising captures
+- forgot cleanup
+    - maybe return a file
+- forgot a mutex
+- retaining a reference after passing ownership (channel)
+
+Why I use Rust even when I don't have to
+- null pointers and enums
+- destructors and move semantics
+- aliasing
+    - accidental sharing
+    - capture by reference
+    - self-aliasing a container
+    - digression about functional languages
+- OwningMutex
+    - not really a functional language concern
+
+Growing the Output type
+- use an enum for file vs stdout
+- destructor based cleanup
+
+repeated theme: "Where is the mistake?"
+- did the close function fail to account for the stdout case, or did it expect the caller to account for it
+- did the random output function fail to clean up, or did it expect the caller to clean up
