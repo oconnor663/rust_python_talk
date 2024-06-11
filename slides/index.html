@@ -1,35 +1,35 @@
 <!doctype html>
 <html lang="en">
-	<head>
-		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-		<title>reveal.js</title>
+        <title>reveal.js</title>
 
-		<link rel="stylesheet" href="dist/reset.css">
-		<link rel="stylesheet" href="dist/reveal.css">
-		<link rel="stylesheet" href="dist/theme/solarized.css">
+        <link rel="stylesheet" href="dist/reset.css">
+        <link rel="stylesheet" href="dist/reveal.css">
+        <link rel="stylesheet" href="dist/theme/solarized.css">
 
-		<!-- Theme used for syntax highlighted code -->
-		<link rel="stylesheet" href="plugin/highlight/solarized-light.css">
+        <!-- Theme used for syntax highlighted code -->
+        <link rel="stylesheet" href="plugin/highlight/solarized-light.css">
 
-		<!-- https://fonts.google.com/selection/embed -->
-		<link rel="preconnect" href="https://fonts.googleapis.com">
-		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-		<link href="https://fonts.googleapis.com/css2?family=Ubuntu+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+        <!-- https://fonts.google.com/selection/embed -->
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Ubuntu+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
 
-		<style>
-		.hljs-ln-numbers {
-			display: none;
-		}
+        <style>
+        .hljs-ln-numbers {
+            display: none;
+        }
         </style>
-	</head>
-	<body>
-		<div class="reveal">
-			<div class="slides">
+    </head>
+    <body>
+        <div class="reveal">
+            <div class="slides">
 
 
-<section>
+<section><!---------------------------------- SLIDE ----------------------------------------------->
 Python code
 <pre><code class="hljs python" data-trim data-line-numbers="|4-8|10-15" style="font-size: 160%"><script type="text/template">
 import sys
@@ -58,7 +58,7 @@ output.write("hello world\n")
 </section>
 
 
-<section>
+<section><!---------------------------------- SLIDE ----------------------------------------------->
 Rust code
 <pre><code class="hljs rust" data-trim data-line-numbers="|4-7"><script type="text/template">
 use std::io;
@@ -99,20 +99,20 @@ fn main() -> io::Result<()> {
 </section>
 
 
-			</div>
-		</div>
+            </div>
+        </div>
 
-		<script src="dist/reveal.js"></script>
-		<script src="plugin/notes/notes.js"></script>
-		<script src="plugin/markdown/markdown.js"></script>
-		<script src="plugin/highlight/highlight.js"></script>
-		<script>
-			Reveal.initialize({
-				hash: true,
-				transition: "none",
-				disableLayout: true,
-				plugins: [ RevealMarkdown, RevealHighlight, RevealNotes ]
-			});
-		</script>
-	</body>
+        <script src="dist/reveal.js"></script>
+        <script src="plugin/notes/notes.js"></script>
+        <script src="plugin/markdown/markdown.js"></script>
+        <script src="plugin/highlight/highlight.js"></script>
+        <script>
+            Reveal.initialize({
+                hash: true,
+                transition: "none",
+                disableLayout: true,
+                plugins: [ RevealMarkdown, RevealHighlight, RevealNotes ]
+            });
+        </script>
+    </body>
 </html>
