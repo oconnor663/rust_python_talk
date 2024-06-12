@@ -370,6 +370,49 @@ main()
 </section>
 
 
+<section><!---------------------------------- SLIDE ----------------------------------------------->
+<pre><code class="hljs python scrollable" data-trim data-line-numbers="31-35|3-11"><script type="text/template">
+import sys
+
+def main():
+    with open_output() as output:
+        output.write("hello world\n")
+
+def open_output():
+    if len(sys.argv) > 1:
+        return ScreamingOutput(sys.argv[1])
+    else:
+        return ScreamingOutput()
+
+class ScreamingOutput:
+    def __init__(self, path=None):
+        if path is not None:
+            self.file = open(path, "w")
+        else:
+            self.file = None
+
+    def write(self, string):
+        all_caps = string.upper()
+        if self.file:
+            return self.file.write(all_caps)
+        else:
+            return sys.stdout.write(all_caps)
+
+    def close(self):
+        if self.file:
+            self.file.close()
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, *_):
+        self.close()
+
+main()
+</script></code></pre>
+</section>
+
+
             </div>
         </div>
 
