@@ -91,10 +91,10 @@ main()
 </script></code></pre>
 
 <pre class="terminal">
-$ python3 scream1.py
+$ python3 scream.py
 HELLO WORLD
 
-$ python3 scream1.py /tmp/out
+$ python3 scream.py /tmp/out
 $ cat /tmp/out
 HELLO WORLD
 </pre>
@@ -233,10 +233,10 @@ impl ScreamingOutput {
 <section><!---------------------------------- SLIDE ----------------------------------------------->
 <div class="rows">
 <pre><code style="font-size: 30pt" class="hljs diff" data-trim><script type="text/template">
-diff --git a/scream1.py b/scream1.py
+diff --git a/scream.py b/scream.py
 index 4da0502..f2a0a56 100644
---- a/scream1.py
-+++ b/scream1.py
+--- a/scream.py
++++ b/scream.py
 @@ -18,8 +18,8 @@ class ScreamingOutput:
      def write(self, string):
          all_caps = string.upper()
@@ -248,13 +248,13 @@ index 4da0502..f2a0a56 100644
 </script></code></pre>
 
 <pre class="terminal">
-$ python scream1.py
+$ python scream.py
 Traceback (most recent call last):
-  File "/home/jacko/why_rust/scream1.py", line 25, in <module>
+  File "/home/jacko/why_rust/scream.py", line 25, in <module>
     main()
-  File "/home/jacko/why_rust/scream1.py", line 9, in main
+  File "/home/jacko/why_rust/scream.py", line 9, in main
     output.write("hello world\n")
-  File "/home/jacko/why_rust/scream1.py", line 23, in write
+  File "/home/jacko/why_rust/scream.py", line 23, in write
     return self.file.write(all_caps)
            ^^^^^^^^^^^^^^^
 AttributeError: 'NoneType' object has no attribute 'write'
