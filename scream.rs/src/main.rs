@@ -2,7 +2,7 @@ use std::io::{stdout, Result, Write};
 
 fn main() -> Result<()> {
     let path = std::env::args().nth(1);
-    let mut output = ScreamingOutput::new(path)?;
+    let mut output = ScreamingOutput::new(path.as_deref())?;
     output.write("hello world\n")?;
     Ok(())
 }
@@ -13,7 +13,7 @@ enum ScreamingOutput {
 }
 
 impl ScreamingOutput {
-    fn new(maybe_path: Option<String>) -> Result<ScreamingOutput> {
+    fn new(maybe_path: Option<&str>) -> Result<ScreamingOutput> {
         match maybe_path {
             Some(path) => {
                 let file = std::fs::File::create(path)?;
