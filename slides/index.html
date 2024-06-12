@@ -48,9 +48,8 @@
 
         code.scrollable {
             box-sizing: border-box;
-            font-size: 50pt;
+            font-size: 40pt;
             height: 100vh;
-            padding: 0 !important;
         }
 
         </style>
@@ -407,6 +406,96 @@ class ScreamingOutput:
 
     def __exit__(self, *_):
         self.close()
+
+main()
+</script></code></pre>
+</section>
+
+
+<section><!---------------------------------- SLIDE ----------------------------------------------->
+<pre><code class="hljs rust scrollable" data-trim data-line-numbers="4-14"><script type="text/template">
+use std::io::{stdout, Result, Write};
+
+fn main() -> Result<()> {
+    let paths: Vec<String> = std::env::args().skip(1).collect();
+    let mut outputs = Vec::new();
+    for path in &paths {
+        outputs.push(ScreamingOutput::new(Some(path))?);
+    }
+    if outputs.is_empty() {
+        outputs.push(ScreamingOutput::new(None)?);
+    }
+    for output in &mut outputs {
+        output.write("hello world\n")?;
+    }
+    Ok(())
+}
+
+enum ScreamingOutput {
+    File { file: std::fs::File },
+    Stdout,
+}
+
+impl ScreamingOutput {
+    fn new(maybe_path: Option<&str>) -> Result<ScreamingOutput> {
+        match maybe_path {
+            Some(path) => {
+                let file = std::fs::File::create(path)?;
+                Ok(ScreamingOutput::File { file })
+            }
+            None => Ok(ScreamingOutput::Stdout),
+        }
+    }
+
+    fn write(&mut self, string: &str) -> Result<()> {
+        let all_caps = string.to_uppercase();
+        match self {
+            ScreamingOutput::File { file } => {
+                file.write_all(all_caps.as_bytes())
+            }
+            ScreamingOutput::Stdout => {
+                stdout().write_all(all_caps.as_bytes())
+            }
+        }
+    }
+}
+</script></code></pre>
+</section>
+
+
+<section><!---------------------------------- SLIDE ----------------------------------------------->
+<pre><code class="hljs python scrollable" data-trim data-line-numbers="4-13"><script type="text/template">
+import sys
+
+def main():
+    paths = sys.argv[1:]
+    outputs = []
+    try:
+        for path in paths:
+            outputs.append(ScreamingOutput(path))
+        for output in outputs:
+            output.write("hello world\n")
+    finally:
+        for output in outputs:
+            output.close()
+
+class ScreamingOutput:
+    def __init__(self, path=None):
+        if path is not None:
+            self.file = open(path, "w")
+        else:
+            self.file = None
+
+    def write(self, string):
+        all_caps = string.upper()
+        if self.file:
+            return self.file.write(all_caps)
+        else:
+            return sys.stdout.write(all_caps)
+
+    def close(self):
+        if self.file:
+            self.file.close()
 
 main()
 </script></code></pre>
