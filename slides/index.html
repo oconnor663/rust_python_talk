@@ -188,7 +188,7 @@ HELLO WORLD
 
 
 <section><!---------------------------------- SLIDE ----------------------------------------------->
-<pre><code class="hljs rust scrollable" data-trim data-line-numbers="10-13|16-24|26-36"><script type="text/template">
+<pre><code class="hljs rust scrollable" data-trim data-line-numbers="4-6|10-13|16-24|26-36"><script type="text/template">
 use std::io::{stdout, Result, Write};
 
 fn main() -> Result<()> {
@@ -293,6 +293,42 @@ error[E0609]: no field `file` on type `&mut ScreamingOutput`
    |                      ^^^^ unknown field
 </pre>
 </div>
+</section>
+
+
+<section><!---------------------------------- SLIDE ----------------------------------------------->
+<pre><code class="hljs rust scrollable" data-trim data-line-numbers="10|26-28"><script type="text/template">
+import sys
+
+def main():
+    if len(sys.argv) > 1:
+        output = ScreamingOutput(sys.argv[1])
+    else:
+        output = ScreamingOutput()
+
+    output.write("hello world\n")
+    output.close()
+
+class ScreamingOutput:
+    def __init__(self, path=None):
+        if path is not None:
+            self.file = open(path, "w")
+        else:
+            self.file = None
+
+    def write(self, string):
+        all_caps = string.upper()
+        if self.file:
+            return self.file.write(all_caps)
+        else:
+            return sys.stdout.write(all_caps)
+
+    def close(self):
+        if self.file:
+            self.file.close()
+
+main()
+</script></code></pre>
 </section>
 
 
