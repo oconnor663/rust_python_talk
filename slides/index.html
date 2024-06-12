@@ -25,9 +25,18 @@
 
         div.columns {
             display: flex;
+            flex-direction: row;
             justify-content: space-evenly;
             align-items: center;
             height: 100vh;
+        }
+
+        div.rows {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-evenly;
+            align-items: center;
+            width: 100vw;
         }
 
         pre.terminal {
@@ -222,7 +231,7 @@ impl ScreamingOutput {
 
 
 <section><!---------------------------------- SLIDE ----------------------------------------------->
-<div class="columns">
+<div class="rows">
 <pre><code style="font-size: 30pt" class="hljs diff" data-trim><script type="text/template">
 diff --git a/scream1.py b/scream1.py
 index 4da0502..f2a0a56 100644
@@ -258,22 +267,22 @@ AttributeError: 'NoneType' object has no attribute 'close'
 
 
 <section><!---------------------------------- SLIDE ----------------------------------------------->
-<div class="columns">
-<pre><code style="font-size: 18pt" class="hljs diff" data-trim><script type="text/template">
+<div class="rows">
+<pre><code style="font-size: 30pt" class="hljs diff" data-trim><script type="text/template">
 diff --git a/scream.rs/src/main.rs b/scream.rs/src/main.rs
-index 16f39cf..14875a1 100644
+index 62af897..5fb7e9a 100644
 --- a/scream.rs/src/main.rs
 +++ b/scream.rs/src/main.rs
-@@ -27,12 +27,12 @@ impl ScreamingOutput {
-     fn write(&mut self, string: &str) -> io::Result<()> {
+@@ -26,12 +26,12 @@ impl ScreamingOutput {
+     fn write(&mut self, string: &str) -> Result<()> {
          let all_caps = string.to_uppercase();
          match self {
              ScreamingOutput::File { file } => {
                  file.write_all(all_caps.as_bytes())
              }
              ScreamingOutput::Stdout => {
--                std::io::stdout().write_all(all_caps.as_bytes())
-+                file.write_all(all_caps.as_bytes())
+-                stdout().write_all(all_caps.as_bytes())
++                self.file.write_all(all_caps.as_bytes())
              }
          }
      }
@@ -282,14 +291,13 @@ index 16f39cf..14875a1 100644
 <pre class="terminal" style="font-size: 20pt">
 $ cargo build
    Compiling scream v0.1.0 (/home/jacko/why_rust/scream.rs)
-error[E0423]: expected value, found macro `file`
-  --> src/main.rs:34:17
+error[E0609]: no field `file` on type `&mut ScreamingOutput`
+  --> src/main.rs:33:22
    |
-34 |                 file.write_all(all_caps.as_bytes())
-   |                 ^^^^ not a value
+33 |                 self.file.write_all(all_caps.as_bytes())
+   |                      ^^^^ unknown field
 
-For more information about this error, try `rustc --explain E0423`.
-error: could not compile `scream` (bin "scream") due to 1 previous error
+For more information about this error, try `rustc --explain E0609`.
 </pre>
 </div>
 </section>
