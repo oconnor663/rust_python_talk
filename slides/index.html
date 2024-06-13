@@ -233,6 +233,39 @@ impl ScreamingOutput {
 <div class="rows">
 <pre><code style="font-size: 30pt" class="hljs diff" data-trim><script type="text/template">
 diff --git a/scream.py b/scream.py
+index 4da0502..7adbfc0 100644
+--- a/scream.py
++++ b/scream.py
+@@ -11,8 +11,5 @@ def main():
+ class ScreamingOutput:
+     def __init__(self, path=None):
+-        if path is not None:
+             self.file = open(path, "w")
+-        else:
+-            self.file = None
+</script></code></pre>
+
+<pre class="terminal">
+$ python scream.py
+Traceback (most recent call last):
+  File "/home/jacko/why_rust/scream.py", line 22, in <module>
+    main()
+  File "/home/jacko/why_rust/scream.py", line 7, in main
+    output = ScreamingOutput()
+             ^^^^^^^^^^^^^^^^^
+  File "/home/jacko/why_rust/scream.py", line 13, in __init__
+    self.file = open(path, "w")
+                ^^^^^^^^^^^^^^^
+TypeError: expected str, bytes or os.PathLike object, not NoneType
+</pre>
+</div>
+</section>
+
+
+<section><!---------------------------------- SLIDE ----------------------------------------------->
+<div class="rows">
+<pre><code style="font-size: 30pt" class="hljs diff" data-trim><script type="text/template">
+diff --git a/scream.py b/scream.py
 index 4da0502..f2a0a56 100644
 --- a/scream.py
 +++ b/scream.py
@@ -264,6 +297,43 @@ AttributeError: 'NoneType' object has no attribute 'write'
 
 <section><!---------------------------------- SLIDE ----------------------------------------------->
 <div class="rows">
+<pre><code style="font-size: 26pt" class="hljs diff" data-trim><script type="text/template">
+diff --git a/scream.rs/src/main.rs b/scream.rs/src/main.rs
+index 562d1c0..fb6a282 100644
+--- a/scream.rs/src/main.rs
++++ b/scream.rs/src/main.rs
+@@ -16,9 +16,4 @@ impl ScreamingOutput {
+     fn new(maybe_path: Option<&str>) -> Result<ScreamingOutput> {
+-        match maybe_path {
+-            Some(path) => {
+-                let file = std::fs::File::create(path)?;
+-                Ok(ScreamingOutput::File { file })
+-            }
+-            None => Ok(ScreamingOutput::Stdout),
+-        }
++        let file = std::fs::File::create(maybe_path)?;
++        Ok(ScreamingOutput::File { file })
+     }
+</script></code></pre>
+
+<pre class="terminal">
+$ cargo build
+   Compiling scream v0.1.0 (/home/jacko/why_rust/scream.rs)
+error[E0277]: the trait bound `Option&lt;&amp;str&gt;: AsRef&lt;Path&gt;` is not satisfied
+   --&gt; src/main.rs:17:42
+    |
+17  |         let file = std::fs::File::create(maybe_path)?;
+    |                    --------------------- ^^^^^^^^^^ the trait `AsRef&lt;Path&gt;`
+    |                    |                     is not implemented for `Option&lt;&amp;str&gt;`
+    |                    |
+    |                    required by a bound introduced by this call
+</pre>
+</div>
+</section>
+
+
+<section><!---------------------------------- SLIDE ----------------------------------------------->
+<div class="rows">
 <pre><code style="font-size: 30pt" class="hljs diff" data-trim><script type="text/template">
 diff --git a/scream.rs/src/main.rs b/scream.rs/src/main.rs
 index 62af897..5fb7e9a 100644
@@ -285,8 +355,8 @@ index 62af897..5fb7e9a 100644
 <pre class="terminal">
 $ cargo build
    Compiling scream v0.1.0 (/home/jacko/why_rust/scream.rs)
-error[E0609]: no field `file` on type `&mut ScreamingOutput`
-  --> src/main.rs:33:22
+error[E0609]: no field `file` on type `&amp;mut ScreamingOutput`
+  --&gt; src/main.rs:33:22
    |
 33 |                 self.file.write_all(all_caps.as_bytes())
    |                      ^^^^ unknown field
