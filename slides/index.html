@@ -28,6 +28,7 @@
             flex-direction: row;
             justify-content: space-evenly;
             align-items: center;
+            width: 100vw;
             height: 100vh;
         }
 
@@ -37,6 +38,7 @@
             justify-content: space-evenly;
             align-items: center;
             width: 100vw;
+            height: 100vh;
         }
 
         pre.terminal {
@@ -57,6 +59,13 @@
     <body>
         <div class="reveal">
             <div class="slides">
+
+
+<section><!---------------------------------- SLIDE ----------------------------------------------->
+<div class="rows">
+<h1>enums</h1>
+</div>
+</section>
 
 
 <section><!---------------------------------- SLIDE ----------------------------------------------->
@@ -297,7 +306,7 @@ AttributeError: 'NoneType' object has no attribute 'write'
 
 <section><!---------------------------------- SLIDE ----------------------------------------------->
 <div class="rows">
-<pre><code style="font-size: 26pt" class="hljs diff" data-trim><script type="text/template">
+<pre><code style="font-size: 25pt" class="hljs diff" data-trim><script type="text/template">
 diff --git a/scream.rs/src/main.rs b/scream.rs/src/main.rs
 index 562d1c0..fb6a282 100644
 --- a/scream.rs/src/main.rs
@@ -361,6 +370,13 @@ error[E0609]: no field `file` on type `&amp;mut ScreamingOutput`
 33 |                 self.file.write_all(all_caps.as_bytes())
    |                      ^^^^ unknown field
 </pre>
+</div>
+</section>
+
+
+<section><!---------------------------------- SLIDE ----------------------------------------------->
+<div class="rows">
+<h1>cleanup</h1>
 </div>
 </section>
 
@@ -660,6 +676,20 @@ impl ScreamingOutput {
     }
 }
 </script></code></pre>
+</section>
+
+
+<section><!---------------------------------- SLIDE ----------------------------------------------->
+<div class="rows">
+<h1>aliasing</h1>
+</div>
+</section>
+
+
+<section><!---------------------------------- SLIDE ----------------------------------------------->
+<div class="rows">
+<h1>mutex</h1>
+</div>
 </section>
 
 
