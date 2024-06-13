@@ -175,10 +175,10 @@ impl ScreamingOutput {
 </script></code></pre>
 
 <pre class="terminal">
-$ cargo run --quiet
+$ cargo run -q
 HELLO WORLD
 
-$ cargo run --quiet -- /tmp/out
+$ cargo run -q /tmp/out
 $ cat /tmp/out
 HELLO WORLD
 </pre>
@@ -370,18 +370,29 @@ main()
 
 
 <section><!---------------------------------- SLIDE ----------------------------------------------->
-<pre><code class="hljs python scrollable" data-trim data-line-numbers="31-35|3-11"><script type="text/template">
+<div class="columns">
+<pre><code style="font-size: 19pt" class="hljs python" data-trim><script type="text/template">
 import sys
 
 def main():
-    with open_output() as output:
-        output.write("hello world\n")
+    outputs = open_outputs(sys.argv[1:])
+    try:
+        for output in outputs:
+            output.write("hello world\n")
+    finally:
+        for output in outputs:
+            output.close()
 
-def open_output():
-    if len(sys.argv) > 1:
-        return ScreamingOutput(sys.argv[1])
-    else:
-        return ScreamingOutput()
+def open_outputs(paths):
+    outputs = []
+    try:
+        for path in paths:
+            outputs.append(ScreamingOutput(path))
+    except Exception:
+        for output in outputs:
+            output.close()
+        raise
+    return outputs
 
 class ScreamingOutput:
     def __init__(self, path=None):
@@ -401,11 +412,63 @@ class ScreamingOutput:
         if self.file:
             self.file.close()
 
-    def __enter__(self):
-        return self
+main()
+</script></code></pre>
 
-    def __exit__(self, *_):
-        self.close()
+<pre class="terminal">
+$ python3 scream.py /tmp/o1 /tmp/o2 /tmp/o3
+$ cat /tmp/o1
+HELLO WORLD
+$ cat /tmp/o2
+HELLO WORLD
+$ cat /tmp/o3
+HELLO WORLD
+</pre>
+</div>
+</section>
+
+
+<section><!---------------------------------- SLIDE ----------------------------------------------->
+<pre><code class="hljs python scrollable" data-trim data-line-numbers="4-10|12-21"><script type="text/template">
+import sys
+
+def main():
+    outputs = open_outputs(sys.argv[1:])
+    try:
+        for output in outputs:
+            output.write("hello world\n")
+    finally:
+        for output in outputs:
+            output.close()
+
+def open_outputs(paths):
+    outputs = []
+    try:
+        for path in paths:
+            outputs.append(ScreamingOutput(path))
+    except Exception:
+        for output in outputs:
+            output.close()
+        raise
+    return outputs
+
+class ScreamingOutput:
+    def __init__(self, path=None):
+        if path is not None:
+            self.file = open(path, "w")
+        else:
+            self.file = None
+
+    def write(self, string):
+        all_caps = string.upper()
+        if self.file:
+            return self.file.write(all_caps)
+        else:
+            return sys.stdout.write(all_caps)
+
+    def close(self):
+        if self.file:
+            self.file.close()
 
 main()
 </script></code></pre>
@@ -413,22 +476,25 @@ main()
 
 
 <section><!---------------------------------- SLIDE ----------------------------------------------->
-<pre><code class="hljs rust scrollable" data-trim data-line-numbers="4-14"><script type="text/template">
+<div class="columns">
+<pre><code style="font-size: 17pt" class="hljs rust" data-trim><script type="text/template">
 use std::io::{stdout, Result, Write};
 
 fn main() -> Result<()> {
     let paths: Vec<String> = std::env::args().skip(1).collect();
-    let mut outputs = Vec::new();
-    for path in &paths {
-        outputs.push(ScreamingOutput::new(Some(path))?);
-    }
-    if outputs.is_empty() {
-        outputs.push(ScreamingOutput::new(None)?);
-    }
+    let mut outputs = open_outputs(&paths)?;
     for output in &mut outputs {
         output.write("hello world\n")?;
     }
     Ok(())
+}
+
+fn open_outputs(paths: &[String]) -> Result<Vec<ScreamingOutput>> {
+    let mut outputs = Vec::new();
+    for path in paths {
+        outputs.push(ScreamingOutput::new(Some(path))?);
+    }
+    Ok(outputs)
 }
 
 enum ScreamingOutput {
@@ -460,44 +526,69 @@ impl ScreamingOutput {
     }
 }
 </script></code></pre>
+
+<pre class="terminal">
+$ cargo run -q /tmp/o1 /tmp/o2 /tmp/o3
+$ cat /tmp/o1
+HELLO WORLD
+$ cat /tmp/o2
+HELLO WORLD
+$ cat /tmp/o3
+HELLO WORLD
+</pre>
+</div>
 </section>
 
 
 <section><!---------------------------------- SLIDE ----------------------------------------------->
-<pre><code class="hljs python scrollable" data-trim data-line-numbers="4-13"><script type="text/template">
-import sys
+<pre><code class="hljs rust scrollable" data-trim data-line-numbers="4-8|12-18"><script type="text/template">
+use std::io::{stdout, Result, Write};
 
-def main():
-    paths = sys.argv[1:]
-    outputs = []
-    try:
-        for path in paths:
-            outputs.append(ScreamingOutput(path))
-        for output in outputs:
-            output.write("hello world\n")
-    finally:
-        for output in outputs:
-            output.close()
+fn main() -> Result<()> {
+    let paths: Vec<String> = std::env::args().skip(1).collect();
+    let mut outputs = open_outputs(&paths)?;
+    for output in &mut outputs {
+        output.write("hello world\n")?;
+    }
+    Ok(())
+}
 
-class ScreamingOutput:
-    def __init__(self, path=None):
-        if path is not None:
-            self.file = open(path, "w")
-        else:
-            self.file = None
+fn open_outputs(paths: &[String]) -> Result<Vec<ScreamingOutput>> {
+    let mut outputs = Vec::new();
+    for path in paths {
+        outputs.push(ScreamingOutput::new(Some(path))?);
+    }
+    Ok(outputs)
+}
 
-    def write(self, string):
-        all_caps = string.upper()
-        if self.file:
-            return self.file.write(all_caps)
-        else:
-            return sys.stdout.write(all_caps)
+enum ScreamingOutput {
+    File { file: std::fs::File },
+    Stdout,
+}
 
-    def close(self):
-        if self.file:
-            self.file.close()
+impl ScreamingOutput {
+    fn new(maybe_path: Option<&str>) -> Result<ScreamingOutput> {
+        match maybe_path {
+            Some(path) => {
+                let file = std::fs::File::create(path)?;
+                Ok(ScreamingOutput::File { file })
+            }
+            None => Ok(ScreamingOutput::Stdout),
+        }
+    }
 
-main()
+    fn write(&mut self, string: &str) -> Result<()> {
+        let all_caps = string.to_uppercase();
+        match self {
+            ScreamingOutput::File { file } => {
+                file.write_all(all_caps.as_bytes())
+            }
+            ScreamingOutput::Stdout => {
+                stdout().write_all(all_caps.as_bytes())
+            }
+        }
+    }
+}
 </script></code></pre>
 </section>
 
