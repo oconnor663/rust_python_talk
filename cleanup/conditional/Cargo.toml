@@ -1,9 +1,0 @@
-[package]
-name = "conditional"
-
-[[bin]]
-name = "conditional"
-path = "conditional.rs"
-
-[dependencies]
-rand = "0.8.5"

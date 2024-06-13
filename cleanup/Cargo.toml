@@ -1,6 +1,0 @@
-[package]
-name = "cleanup"
-
-[[bin]]
-name = "cleanup"
-path = "cleanup.rs"
