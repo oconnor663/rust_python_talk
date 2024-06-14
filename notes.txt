@@ -80,3 +80,5 @@ Growing the Output type
 repeated theme: "Where is the mistake?"
 - did the close function fail to account for the stdout case, or did it expect the caller to account for it
 - did the random output function fail to clean up, or did it expect the caller to clean up
+
+The Python default arg footgun is an aliasing bug.
