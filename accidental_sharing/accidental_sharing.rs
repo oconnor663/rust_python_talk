@@ -1,21 +1,20 @@
-pub struct Person {
-    pub favorite_foods: Vec<String>,
+struct Person {
+    favorite_foods: Vec<&'static str>,
 }
 
 fn main() {
-    let default_foods = vec!["donuts".into()];
+    let donuts = vec!["donuts"];
 
     let mut alice = Person {
-        favorite_foods: default_foods,
+        favorite_foods: donuts, // value moved here
     };
-    alice.favorite_foods.push("apples".into());
+    alice.favorite_foods.push("apples");
 
     let mut bob = Person {
-        // OOPS: Alice took ownership of this list.
-        favorite_foods: default_foods,
+        favorite_foods: donuts, // use of moved value: `donuts`
     };
-    bob.favorite_foods.push("bananas".into());
+    bob.favorite_foods.push("bananas");
 
-    println!("alice: {:?}", alice.favorite_foods);
-    println!("bob: {:?}", bob.favorite_foods);
+    println!("{:?}", alice.favorite_foods);
+    println!("{:?}", bob.favorite_foods);
 }

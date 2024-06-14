@@ -1,21 +1,20 @@
-pub struct Person<'a> {
-    pub favorite_foods: &'a mut Vec<String>,
+struct Person<'food> {
+    favorite_foods: &'food mut Vec<&'static str>,
 }
 
 fn main() {
-    let mut default_foods = vec!["donuts".into()];
-
+    let mut donuts = vec!["donuts"];
     let alice = Person {
-        favorite_foods: &mut default_foods,
+        // first mutable borrow occurs here
+        favorite_foods: &mut donuts,
     };
-    alice.favorite_foods.push("apples".into());
-
+    alice.favorite_foods.push("apples");
     let bob = Person {
-        // OOPS: We can't take two mutable references to the same list.
-        favorite_foods: &mut default_foods,
+        // error: cannot borrow `donuts` as mutable more than once at a time
+        favorite_foods: &mut donuts,
     };
-    bob.favorite_foods.push("bananas".into());
+    bob.favorite_foods.push("bananas");
 
-    println!("alice: {:?}", alice.favorite_foods);
-    println!("bob: {:?}", bob.favorite_foods);
+    println!("{:?}", alice.favorite_foods);
+    println!("{:?}", bob.favorite_foods);
 }

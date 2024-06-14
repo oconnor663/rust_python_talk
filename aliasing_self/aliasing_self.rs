@@ -1,26 +1,18 @@
-pub struct NumberList {
-    numbers: Vec<i32>,
+struct Person {
+    favorite_foods: Vec<&'static str>,
 }
 
-impl NumberList {
-    pub fn take_all(&mut self, other: &mut NumberList) {
-        self.numbers.extend(&other.numbers);
-        other.numbers.clear();
+impl Person {
+    fn add_favorites(&mut self, other: &Person) {
+        for food in &other.favorite_foods {
+            self.favorite_foods.push(food);
+        }
     }
 }
 
 fn main() {
-    let mut list_a = NumberList {
-        numbers: vec![1, 2, 3],
+    let mut alice = Person {
+        favorite_foods: vec!["apples"],
     };
-    let mut list_b = NumberList {
-        numbers: vec![4, 5, 6],
-    };
-    list_a.take_all(&mut list_b);
-    assert_eq!(list_a.numbers, [1, 2, 3, 4, 5, 6]);
-    assert_eq!(list_b.numbers, []);
-
-    // OOPS: What does this do?
-    list_a.take_all(&mut list_a);
-    assert_eq!(list_a.numbers, [1, 2, 3, 4, 5, 6]);
+    alice.add_favorites(&alice);
 }

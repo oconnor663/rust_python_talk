@@ -1,21 +1,22 @@
-pub struct Person<'a> {
-    pub favorite_foods: &'a Vec<String>,
+struct Person<'food> {
+    favorite_foods: &'food Vec<&'static str>,
 }
 
 fn main() {
-    let default_foods = vec!["donuts".into()];
+    let donuts = vec!["donuts"];
 
     let alice = Person {
-        favorite_foods: &default_foods,
+        favorite_foods: &donuts,
     };
-    // OOPS: We can't mutate the list through a shared reference.
-    alice.favorite_foods.push("apples".into());
+    // error: cannot borrow `*alice.favorite_foods` as mutable
+    alice.favorite_foods.push("apples");
 
     let bob = Person {
-        favorite_foods: &default_foods,
+        favorite_foods: &donuts,
     };
-    bob.favorite_foods.push("bananas".into());
+    // error: cannot borrow `*bob.favorite_foods` as mutable
+    bob.favorite_foods.push("bananas");
 
-    println!("alice: {:?}", alice.favorite_foods);
-    println!("bob: {:?}", bob.favorite_foods);
+    println!("{:?}", alice.favorite_foods);
+    println!("{:?}", bob.favorite_foods);
 }
