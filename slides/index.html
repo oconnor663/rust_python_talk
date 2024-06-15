@@ -77,7 +77,7 @@
 
 <ul>
 <li><span class="fire">blazing</span> speed</li>
-<li>static typing</li>
+<li>static types</li>
 <li>embedding</li>
 <li>Cargo</li>
 </ul>
@@ -715,7 +715,7 @@ fn main() {
     alice.favorite_foods.push("apples");
 
     let mut bob = Person {
-        favorite_foods: donuts, // use of moved value: `donuts`
+        favorite_foods: donuts, // error: use of moved value: `donuts`
     };
     bob.favorite_foods.push("bananas");
 
@@ -995,7 +995,7 @@ $ cargo run -q
 
 <section><!---------------------------------- SLIDE ----------------------------------------------->
 <div class="columns">
-<pre><code style="font-size: 40pt" class="hljs rust" data-trim data-line-numbers="|8-10"><script type="text/template">
+<pre><code style="font-size: 40pt" class="hljs rust" data-trim data-line-numbers="8-10"><script type="text/template">
 use std::ops::DerefMut;
 use std::sync::Mutex;
 

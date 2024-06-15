@@ -11,7 +11,7 @@ fn main() {
     alice.favorite_foods.push("apples");
 
     let mut bob = Person {
-        favorite_foods: donuts, // use of moved value: `donuts`
+        favorite_foods: donuts, // error: use of moved value: `donuts`
     };
     bob.favorite_foods.push("bananas");
 
