@@ -18,7 +18,6 @@ def add_500k():
     global X
     for _ in range(500_000):
         with X as x:
-            assert len(x) == 1
             x[0] += int(1)
 
 thread1 = Thread(target=add_500k)

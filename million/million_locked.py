@@ -4,7 +4,7 @@ X = 0
 X_LOCK = Lock()
 
 def add_500k():
-    global X
+    global X, X_LOCK
     for _ in range(500_000):
         with X_LOCK:
             X += int(1)
