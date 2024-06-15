@@ -1,22 +1,5 @@
 use std::io::{stdout, Result, Write};
 
-fn main() -> Result<()> {
-    let paths: Vec<String> = std::env::args().skip(1).collect();
-    let mut outputs = open_outputs(&paths)?;
-    for output in &mut outputs {
-        output.write("hello world\n")?;
-    }
-    Ok(())
-}
-
-fn open_outputs(paths: &[String]) -> Result<Vec<ScreamingOutput>> {
-    let mut outputs = Vec::new();
-    for path in paths {
-        outputs.push(ScreamingOutput::new(Some(path))?);
-    }
-    Ok(outputs)
-}
-
 enum ScreamingOutput {
     File { file: std::fs::File },
     Stdout,
@@ -44,4 +27,21 @@ impl ScreamingOutput {
             }
         }
     }
+}
+
+fn open_outputs(paths: &[String]) -> Result<Vec<ScreamingOutput>> {
+    let mut outputs = Vec::new();
+    for path in paths {
+        outputs.push(ScreamingOutput::new(Some(path))?);
+    }
+    Ok(outputs)
+}
+
+fn main() -> Result<()> {
+    let paths: Vec<String> = std::env::args().skip(1).collect();
+    let mut outputs = open_outputs(&paths)?;
+    for output in &mut outputs {
+        output.write("hello world\n")?;
+    }
+    Ok(())
 }

@@ -1,12 +1,5 @@
 use std::io::{stdout, Result, Write};
 
-fn main() -> Result<()> {
-    let path = std::env::args().nth(1);
-    let mut output = ScreamingOutput::new(path.as_deref())?;
-    output.write("hello world\n")?;
-    Ok(())
-}
-
 enum ScreamingOutput {
     File { file: std::fs::File },
     Stdout,
@@ -34,4 +27,11 @@ impl ScreamingOutput {
             }
         }
     }
+}
+
+fn main() -> Result<()> {
+    let path = std::env::args().nth(1);
+    let mut output = ScreamingOutput::new(path.as_deref())?;
+    output.write("hello world\n")?;
+    Ok(())
 }

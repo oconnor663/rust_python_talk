@@ -73,11 +73,12 @@
 <div class="rows">
 <div style="text-align: left">
 
-<p>We're not here to talk about about:</p>
+<p>We're <span style="text-decoration: underline">not</span> here to talk about about:</p>
 
 <ul>
 <li><span class="fire">blazing</span> speed</li>
-<li>embedded</li>
+<li>static typing</li>
+<li>embedding</li>
 <li>Cargo</li>
 </ul>
 
@@ -108,14 +109,6 @@
 <pre><code style="font-size: 30pt" class="hljs python" data-trim><script type="text/template">
 import sys
 
-def main():
-    if len(sys.argv) > 1:
-        output = ScreamingOutput(sys.argv[1])
-    else:
-        output = ScreamingOutput()
-
-    output.write("hello world\n")
-
 class ScreamingOutput:
     def __init__(self, path=None):
         if path is not None:
@@ -126,11 +119,16 @@ class ScreamingOutput:
     def write(self, string):
         all_caps = string.upper()
         if self.file:
-            return self.file.write(all_caps)
+            self.file.write(all_caps)
         else:
-            return sys.stdout.write(all_caps)
+            sys.stdout.write(all_caps)
 
-main()
+if len(sys.argv) > 1:
+    output = ScreamingOutput(sys.argv[1])
+else:
+    output = ScreamingOutput()
+
+output.write("hello world\n")
 </script></code></pre>
 
 <pre class="terminal">
@@ -146,16 +144,8 @@ HELLO WORLD
 
 
 <section><!---------------------------------- SLIDE ----------------------------------------------->
-<pre><code class="hljs python scrollable" data-trim data-line-numbers="3-9|12-16|18-23"><script type="text/template">
+<pre><code class="hljs python scrollable" data-trim data-line-numbers="3-8|10-15|17-22"><script type="text/template">
 import sys
-
-def main():
-    if len(sys.argv) > 1:
-        output = ScreamingOutput(sys.argv[1])
-    else:
-        output = ScreamingOutput()
-
-    output.write("hello world\n")
 
 class ScreamingOutput:
     def __init__(self, path=None):
@@ -167,11 +157,16 @@ class ScreamingOutput:
     def write(self, string):
         all_caps = string.upper()
         if self.file:
-            return self.file.write(all_caps)
+            self.file.write(all_caps)
         else:
-            return sys.stdout.write(all_caps)
+            sys.stdout.write(all_caps)
 
-main()
+if len(sys.argv) > 1:
+    output = ScreamingOutput(sys.argv[1])
+else:
+    output = ScreamingOutput()
+
+output.write("hello world\n")
 </script></code></pre>
 </section>
 
@@ -180,13 +175,6 @@ main()
 <div class="columns">
 <pre><code style="font-size: 20pt" class="hljs rust" data-trim><script type="text/template">
 use std::io::{stdout, Result, Write};
-
-fn main() -> Result<()> {
-    let path = std::env::args().nth(1);
-    let mut output = ScreamingOutput::new(path.as_deref())?;
-    output.write("hello world\n")?;
-    Ok(())
-}
 
 enum ScreamingOutput {
     File { file: std::fs::File },
@@ -215,6 +203,13 @@ impl ScreamingOutput {
             }
         }
     }
+}
+
+fn main() -> Result<()> {
+    let path = std::env::args().nth(1);
+    let mut output = ScreamingOutput::new(path.as_deref())?;
+    output.write("hello world\n")?;
+    Ok(())
 }
 </script></code></pre>
 
@@ -231,15 +226,8 @@ HELLO WORLD
 
 
 <section><!---------------------------------- SLIDE ----------------------------------------------->
-<pre><code class="hljs rust scrollable" data-trim data-line-numbers="4-6|10-13|16-24|26-36"><script type="text/template">
+<pre><code class="hljs rust scrollable" data-trim data-line-numbers="3-6|9-17|19-29|33-35"><script type="text/template">
 use std::io::{stdout, Result, Write};
-
-fn main() -> Result<()> {
-    let path = std::env::args().nth(1);
-    let mut output = ScreamingOutput::new(path.as_deref())?;
-    output.write("hello world\n")?;
-    Ok(())
-}
 
 enum ScreamingOutput {
     File { file: std::fs::File },
@@ -269,6 +257,13 @@ impl ScreamingOutput {
         }
     }
 }
+
+fn main() -> Result<()> {
+    let path = std::env::args().nth(1);
+    let mut output = ScreamingOutput::new(path.as_deref())?;
+    output.write("hello world\n")?;
+    Ok(())
+}
 </script></code></pre>
 </section>
 
@@ -277,10 +272,10 @@ impl ScreamingOutput {
 <div class="rows">
 <pre><code style="font-size: 30pt" class="hljs diff" data-trim><script type="text/template">
 diff --git a/scream.py b/scream.py
-index 4da0502..7adbfc0 100644
+index 9347315..956d791 100644
 --- a/scream.py
 +++ b/scream.py
-@@ -11,8 +11,5 @@ def main():
+@@ -3,8 +3,5 @@ import sys
  class ScreamingOutput:
      def __init__(self, path=None):
 -        if path is not None:
@@ -292,13 +287,11 @@ index 4da0502..7adbfc0 100644
 <pre class="terminal">
 $ python scream.py
 Traceback (most recent call last):
-  File "/home/jacko/why_rust/scream.py", line 22, in <module>
-    main()
-  File "/home/jacko/why_rust/scream.py", line 7, in main
+  File &quot;/home/jacko/why_rust/scream.py&quot;, line 17, in &lt;module&gt;
     output = ScreamingOutput()
              ^^^^^^^^^^^^^^^^^
-  File "/home/jacko/why_rust/scream.py", line 13, in __init__
-    self.file = open(path, "w")
+  File &quot;/home/jacko/why_rust/scream.py&quot;, line 5, in __init__
+    self.file = open(path, &quot;w&quot;)
                 ^^^^^^^^^^^^^^^
 TypeError: expected str, bytes or os.PathLike object, not NoneType
 </pre>
@@ -310,30 +303,28 @@ TypeError: expected str, bytes or os.PathLike object, not NoneType
 <div class="rows">
 <pre><code style="font-size: 30pt" class="hljs diff" data-trim><script type="text/template">
 diff --git a/scream.py b/scream.py
-index 4da0502..f2a0a56 100644
+index 9347315..c12308e 100644
 --- a/scream.py
 +++ b/scream.py
-@@ -18,8 +18,8 @@ class ScreamingOutput:
+@@ -10,11 +10,11 @@ class ScreamingOutput:
      def write(self, string):
          all_caps = string.upper()
          if self.file:
-             return self.file.write(all_caps)
+             self.file.write(all_caps)
          else:
--            return sys.stdout.write(all_caps)
-+            return self.file.write(all_caps)
+-            sys.stdout.write(all_caps)
++            self.file.write(all_caps)
 </script></code></pre>
 
 <pre class="terminal">
 $ python scream.py
 Traceback (most recent call last):
-  File "/home/jacko/why_rust/scream.py", line 25, in <module>
-    main()
-  File "/home/jacko/why_rust/scream.py", line 9, in main
-    output.write("hello world\n")
-  File "/home/jacko/why_rust/scream.py", line 23, in write
-    return self.file.write(all_caps)
-           ^^^^^^^^^^^^^^^
-AttributeError: 'NoneType' object has no attribute 'write'
+  File &quot;/home/jacko/why_rust/scream.py&quot;, line 22, in &lt;module&gt;
+    output.write(&quot;hello world\n&quot;)
+  File &quot;/home/jacko/why_rust/scream.py&quot;, line 15, in write
+    self.file.write(all_caps)
+    ^^^^^^^^^^^^^^^
+AttributeError: &apos;NoneType&apos; object has no attribute &apos;write&apos;
 </pre>
 </div>
 </section>
@@ -343,10 +334,10 @@ AttributeError: 'NoneType' object has no attribute 'write'
 <div class="rows">
 <pre><code style="font-size: 25pt" class="hljs diff" data-trim><script type="text/template">
 diff --git a/scream.rs/src/main.rs b/scream.rs/src/main.rs
-index 562d1c0..fb6a282 100644
+index 94d3414..b8be627 100644
 --- a/scream.rs/src/main.rs
 +++ b/scream.rs/src/main.rs
-@@ -16,9 +16,4 @@ impl ScreamingOutput {
+@@ -9,9 +9,4 @@ impl ScreamingOutput {
      fn new(maybe_path: Option<&str>) -> Result<ScreamingOutput> {
 -        match maybe_path {
 -            Some(path) => {
@@ -364,11 +355,10 @@ index 562d1c0..fb6a282 100644
 $ cargo build
    Compiling scream v0.1.0 (/home/jacko/why_rust/scream.rs)
 error[E0277]: the trait bound `Option&lt;&amp;str&gt;: AsRef&lt;Path&gt;` is not satisfied
-   --&gt; src/main.rs:17:42
+   --&gt; src/main.rs:10:42
     |
-17  |         let file = std::fs::File::create(maybe_path)?;
-    |                    --------------------- ^^^^^^^^^^ the trait `AsRef&lt;Path&gt;`
-    |                    |                     is not implemented for `Option&lt;&amp;str&gt;`
+10  |         let file = std::fs::File::create(maybe_path)?;
+    |                    --------------------- ^^^^^^^^^^ the trait `AsRef&lt;Path&gt;`...
     |                    |
     |                    required by a bound introduced by this call
 </pre>
@@ -380,10 +370,10 @@ error[E0277]: the trait bound `Option&lt;&amp;str&gt;: AsRef&lt;Path&gt;` is not
 <div class="rows">
 <pre><code style="font-size: 30pt" class="hljs diff" data-trim><script type="text/template">
 diff --git a/scream.rs/src/main.rs b/scream.rs/src/main.rs
-index 62af897..5fb7e9a 100644
+index 94d3414..7852de1 100644
 --- a/scream.rs/src/main.rs
 +++ b/scream.rs/src/main.rs
-@@ -26,12 +26,12 @@ impl ScreamingOutput {
+@@ -19,15 +19,15 @@ impl ScreamingOutput {
      fn write(&mut self, string: &str) -> Result<()> {
          let all_caps = string.to_uppercase();
          match self {
@@ -400,9 +390,9 @@ index 62af897..5fb7e9a 100644
 $ cargo build
    Compiling scream v0.1.0 (/home/jacko/why_rust/scream.rs)
 error[E0609]: no field `file` on type `&amp;mut ScreamingOutput`
-  --&gt; src/main.rs:33:22
+  --&gt; src/main.rs:26:22
    |
-33 |                 self.file.write_all(all_caps.as_bytes())
+26 |                 self.file.write_all(all_caps.as_bytes())
    |                      ^^^^ unknown field
 </pre>
 </div>
@@ -417,17 +407,8 @@ error[E0609]: no field `file` on type `&amp;mut ScreamingOutput`
 
 
 <section><!---------------------------------- SLIDE ----------------------------------------------->
-<pre><code class="hljs python scrollable" data-trim data-line-numbers="26-28|10"><script type="text/template">
+<pre><code class="hljs python scrollable" data-trim data-line-numbers="17-19|27"><script type="text/template">
 import sys
-
-def main():
-    if len(sys.argv) > 1:
-        output = ScreamingOutput(sys.argv[1])
-    else:
-        output = ScreamingOutput()
-
-    output.write("hello world\n")
-    output.close()
 
 class ScreamingOutput:
     def __init__(self, path=None):
@@ -439,33 +420,28 @@ class ScreamingOutput:
     def write(self, string):
         all_caps = string.upper()
         if self.file:
-            return self.file.write(all_caps)
+            self.file.write(all_caps)
         else:
-            return sys.stdout.write(all_caps)
+            sys.stdout.write(all_caps)
 
     def close(self):
         if self.file:
             self.file.close()
 
-main()
+if len(sys.argv) > 1:
+    output = ScreamingOutput(sys.argv[1])
+else:
+    output = ScreamingOutput()
+
+output.write("hello world\n")
+output.close()
 </script></code></pre>
 </section>
 
 
 <section><!---------------------------------- SLIDE ----------------------------------------------->
-<pre><code class="hljs python scrollable" data-trim data-line-numbers="9-12"><script type="text/template">
+<pre><code class="hljs python scrollable" data-trim data-line-numbers="26-29"><script type="text/template">
 import sys
-
-def main():
-    if len(sys.argv) > 1:
-        output = ScreamingOutput(sys.argv[1])
-    else:
-        output = ScreamingOutput()
-
-    try:
-        output.write("hello world\n")
-    finally:
-        output.close()
 
 class ScreamingOutput:
     def __init__(self, path=None):
@@ -477,32 +453,49 @@ class ScreamingOutput:
     def write(self, string):
         all_caps = string.upper()
         if self.file:
-            return self.file.write(all_caps)
+            self.file.write(all_caps)
         else:
-            return sys.stdout.write(all_caps)
+            sys.stdout.write(all_caps)
 
     def close(self):
         if self.file:
             self.file.close()
 
-main()
+if len(sys.argv) > 1:
+    output = ScreamingOutput(sys.argv[1])
+else:
+    output = ScreamingOutput()
+
+try:
+    output.write("hello world\n")
+finally:
+    output.close()
 </script></code></pre>
 </section>
 
 
 <section><!---------------------------------- SLIDE ----------------------------------------------->
 <div class="columns">
-<pre><code style="font-size: 19pt" class="hljs python" data-trim><script type="text/template">
+<pre><code style="font-size: 20pt" class="hljs python" data-trim><script type="text/template">
 import sys
 
-def main():
-    outputs = open_outputs(sys.argv[1:])
-    try:
-        for output in outputs:
-            output.write("hello world\n")
-    finally:
-        for output in outputs:
-            output.close()
+class ScreamingOutput:
+    def __init__(self, path=None):
+        if path is not None:
+            self.file = open(path, "w")
+        else:
+            self.file = None
+
+    def write(self, string):
+        all_caps = string.upper()
+        if self.file:
+            self.file.write(all_caps)
+        else:
+            sys.stdout.write(all_caps)
+
+    def close(self):
+        if self.file:
+            self.file.close()
 
 def open_outputs(paths):
     outputs = []
@@ -515,25 +508,13 @@ def open_outputs(paths):
         raise
     return outputs
 
-class ScreamingOutput:
-    def __init__(self, path=None):
-        if path is not None:
-            self.file = open(path, "w")
-        else:
-            self.file = None
-
-    def write(self, string):
-        all_caps = string.upper()
-        if self.file:
-            return self.file.write(all_caps)
-        else:
-            return sys.stdout.write(all_caps)
-
-    def close(self):
-        if self.file:
-            self.file.close()
-
-main()
+outputs = open_outputs(sys.argv[1:])
+try:
+    for output in outputs:
+        output.write("hello world\n")
+finally:
+    for output in outputs:
+        output.close()
 </script></code></pre>
 
 <pre class="terminal">
@@ -550,17 +531,26 @@ HELLO WORLD
 
 
 <section><!---------------------------------- SLIDE ----------------------------------------------->
-<pre><code class="hljs python scrollable" data-trim data-line-numbers="3-10|12-21"><script type="text/template">
+<pre><code class="hljs python scrollable" data-trim data-line-numbers="21-30|32-38"><script type="text/template">
 import sys
 
-def main():
-    outputs = open_outputs(sys.argv[1:])
-    try:
-        for output in outputs:
-            output.write("hello world\n")
-    finally:
-        for output in outputs:
-            output.close()
+class ScreamingOutput:
+    def __init__(self, path=None):
+        if path is not None:
+            self.file = open(path, "w")
+        else:
+            self.file = None
+
+    def write(self, string):
+        all_caps = string.upper()
+        if self.file:
+            self.file.write(all_caps)
+        else:
+            sys.stdout.write(all_caps)
+
+    def close(self):
+        if self.file:
+            self.file.close()
 
 def open_outputs(paths):
     outputs = []
@@ -573,25 +563,13 @@ def open_outputs(paths):
         raise
     return outputs
 
-class ScreamingOutput:
-    def __init__(self, path=None):
-        if path is not None:
-            self.file = open(path, "w")
-        else:
-            self.file = None
-
-    def write(self, string):
-        all_caps = string.upper()
-        if self.file:
-            return self.file.write(all_caps)
-        else:
-            return sys.stdout.write(all_caps)
-
-    def close(self):
-        if self.file:
-            self.file.close()
-
-main()
+outputs = open_outputs(sys.argv[1:])
+try:
+    for output in outputs:
+        output.write("hello world\n")
+finally:
+    for output in outputs:
+        output.close()
 </script></code></pre>
 </section>
 
@@ -600,23 +578,6 @@ main()
 <div class="columns">
 <pre><code style="font-size: 17pt" class="hljs rust" data-trim><script type="text/template">
 use std::io::{stdout, Result, Write};
-
-fn main() -> Result<()> {
-    let paths: Vec<String> = std::env::args().skip(1).collect();
-    let mut outputs = open_outputs(&paths)?;
-    for output in &mut outputs {
-        output.write("hello world\n")?;
-    }
-    Ok(())
-}
-
-fn open_outputs(paths: &[String]) -> Result<Vec<ScreamingOutput>> {
-    let mut outputs = Vec::new();
-    for path in paths {
-        outputs.push(ScreamingOutput::new(Some(path))?);
-    }
-    Ok(outputs)
-}
 
 enum ScreamingOutput {
     File { file: std::fs::File },
@@ -645,6 +606,23 @@ impl ScreamingOutput {
             }
         }
     }
+}
+
+fn open_outputs(paths: &[String]) -> Result<Vec<ScreamingOutput>> {
+    let mut outputs = Vec::new();
+    for path in paths {
+        outputs.push(ScreamingOutput::new(Some(path))?);
+    }
+    Ok(outputs)
+}
+
+fn main() -> Result<()> {
+    let paths: Vec<String> = std::env::args().skip(1).collect();
+    let mut outputs = open_outputs(&paths)?;
+    for output in &mut outputs {
+        output.write("hello world\n")?;
+    }
+    Ok(())
 }
 </script></code></pre>
 
@@ -662,25 +640,8 @@ HELLO WORLD
 
 
 <section><!---------------------------------- SLIDE ----------------------------------------------->
-<pre><code class="hljs rust scrollable" data-trim data-line-numbers="3-10|12-18"><script type="text/template">
+<pre><code class="hljs rust scrollable" data-trim data-line-numbers="32-38|41-45"><script type="text/template">
 use std::io::{stdout, Result, Write};
-
-fn main() -> Result<()> {
-    let paths: Vec<String> = std::env::args().skip(1).collect();
-    let mut outputs = open_outputs(&paths)?;
-    for output in &mut outputs {
-        output.write("hello world\n")?;
-    }
-    Ok(())
-}
-
-fn open_outputs(paths: &[String]) -> Result<Vec<ScreamingOutput>> {
-    let mut outputs = Vec::new();
-    for path in paths {
-        outputs.push(ScreamingOutput::new(Some(path))?);
-    }
-    Ok(outputs)
-}
 
 enum ScreamingOutput {
     File { file: std::fs::File },
@@ -709,6 +670,23 @@ impl ScreamingOutput {
             }
         }
     }
+}
+
+fn open_outputs(paths: &[String]) -> Result<Vec<ScreamingOutput>> {
+    let mut outputs = Vec::new();
+    for path in paths {
+        outputs.push(ScreamingOutput::new(Some(path))?);
+    }
+    Ok(outputs)
+}
+
+fn main() -> Result<()> {
+    let paths: Vec<String> = std::env::args().skip(1).collect();
+    let mut outputs = open_outputs(&paths)?;
+    for output in &mut outputs {
+        output.write("hello world\n")?;
+    }
+    Ok(())
 }
 </script></code></pre>
 </section>
