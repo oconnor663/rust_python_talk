@@ -1154,6 +1154,68 @@ with X as x:
 </section>
 
 
+<section><!---------------------------------- SLIDE ----------------------------------------------->
+<div class="rows">
+<pre><code style="font-size: 30pt" class="hljs diff" data-trim><script type="text/template">
+diff --git a/million/million_owning.py b/million/million_owning.py
+index f111a3e..7f7d447 100644
+--- a/million/million_owning.py
++++ b/million/million_owning.py
+@@ -19,5 +19,6 @@ def add_500k():
+     for _ in range(500_000):
+         with X as x:
+-            x[0] += int(1)
++            pass
++        x[0] += int(1)
+</script></code></pre>
+
+<pre class="terminal">
+$ python million_owning.py
+1000000
+$ python million_owning.py
+994170
+$ python million_owning.py
+1000000
+</pre>
+</div>
+</section>
+
+
+<section><!---------------------------------- SLIDE ----------------------------------------------->
+<div class="rows">
+<pre><code style="font-size: 28pt" class="hljs diff" data-trim><script type="text/template">
+diff --git a/million/million.rs b/million/million.rs
+index 05f92c2..a4cef0f 100644
+--- a/million/million.rs
++++ b/million/million.rs
+@@ -7,6 +7,7 @@ fn add_500k() {
+     for _ in 0..500_000 {
+         let mut guard: MutexGuard<i32> = X.lock().unwrap();
+         let x: &mut i32 = guard.deref_mut();
++        drop(guard);
+         *x += 1;
+     }
+</script></code></pre>
+
+<pre class="terminal">
+$ cargo build
+   Compiling million v0.0.0 (/home/jacko/why_rust/million)
+error[E0505]: cannot move out of `guard` because it is borrowed
+  --> million.rs:10:14
+   |
+8  |         let mut guard: MutexGuard<i32> = X.lock().unwrap();
+   |             --------- binding `guard` declared here
+9  |         let x: &mut i32 = guard.deref_mut();
+   |                           ----- borrow of `guard` occurs here
+10 |         drop(guard);
+   |              ^^^^^ move out of `guard` occurs here
+11 |         *x += 1;
+   |         ------- borrow later used here
+</pre>
+</div>
+</section>
+
+
             </div>
         </div>
 
