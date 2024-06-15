@@ -144,6 +144,68 @@ HELLO WORLD
 
 
 <section><!---------------------------------- SLIDE ----------------------------------------------->
+<div class="rows">
+<pre><code style="font-size: 30pt" class="hljs diff" data-trim><script type="text/template">
+diff --git a/scream.py b/scream.py
+index 9347315..956d791 100644
+--- a/scream.py
++++ b/scream.py
+@@ -3,8 +3,5 @@ import sys
+ class ScreamingOutput:
+     def __init__(self, path=None):
+-        if path is not None:
+             self.file = open(path, "w")
+-        else:
+-            self.file = None
+</script></code></pre>
+
+<pre class="terminal">
+$ python scream.py
+Traceback (most recent call last):
+  File &quot;/home/jacko/why_rust/scream.py&quot;, line 17, in &lt;module&gt;
+    output = ScreamingOutput()
+             ^^^^^^^^^^^^^^^^^
+  File &quot;/home/jacko/why_rust/scream.py&quot;, line 5, in __init__
+    self.file = open(path, &quot;w&quot;)
+                ^^^^^^^^^^^^^^^
+TypeError: expected str, bytes or os.PathLike object, not NoneType
+</pre>
+</div>
+</section>
+
+
+<section><!---------------------------------- SLIDE ----------------------------------------------->
+<div class="rows">
+<pre><code style="font-size: 30pt" class="hljs diff" data-trim><script type="text/template">
+diff --git a/scream.py b/scream.py
+index 9347315..c12308e 100644
+--- a/scream.py
++++ b/scream.py
+@@ -10,11 +10,11 @@ class ScreamingOutput:
+     def write(self, string):
+         all_caps = string.upper()
+         if self.file:
+             self.file.write(all_caps)
+         else:
+-            sys.stdout.write(all_caps)
++            self.file.write(all_caps)
+</script></code></pre>
+
+<pre class="terminal">
+$ python scream.py
+Traceback (most recent call last):
+  File &quot;/home/jacko/why_rust/scream.py&quot;, line 22, in &lt;module&gt;
+    output.write(&quot;hello world\n&quot;)
+  File &quot;/home/jacko/why_rust/scream.py&quot;, line 15, in write
+    self.file.write(all_caps)
+    ^^^^^^^^^^^^^^^
+AttributeError: &apos;NoneType&apos; object has no attribute &apos;write&apos;
+</pre>
+</div>
+</section>
+
+
+<section><!---------------------------------- SLIDE ----------------------------------------------->
 <div class="columns">
 <pre><code style="font-size: 21pt" class="hljs rust" data-trim><script type="text/template">
 use std::io::{stdout, Result, Write};
@@ -237,68 +299,6 @@ fn main() -> Result<()> {
     Ok(())
 }
 </script></code></pre>
-</section>
-
-
-<section><!---------------------------------- SLIDE ----------------------------------------------->
-<div class="rows">
-<pre><code style="font-size: 30pt" class="hljs diff" data-trim><script type="text/template">
-diff --git a/scream.py b/scream.py
-index 9347315..956d791 100644
---- a/scream.py
-+++ b/scream.py
-@@ -3,8 +3,5 @@ import sys
- class ScreamingOutput:
-     def __init__(self, path=None):
--        if path is not None:
-             self.file = open(path, "w")
--        else:
--            self.file = None
-</script></code></pre>
-
-<pre class="terminal">
-$ python scream.py
-Traceback (most recent call last):
-  File &quot;/home/jacko/why_rust/scream.py&quot;, line 17, in &lt;module&gt;
-    output = ScreamingOutput()
-             ^^^^^^^^^^^^^^^^^
-  File &quot;/home/jacko/why_rust/scream.py&quot;, line 5, in __init__
-    self.file = open(path, &quot;w&quot;)
-                ^^^^^^^^^^^^^^^
-TypeError: expected str, bytes or os.PathLike object, not NoneType
-</pre>
-</div>
-</section>
-
-
-<section><!---------------------------------- SLIDE ----------------------------------------------->
-<div class="rows">
-<pre><code style="font-size: 30pt" class="hljs diff" data-trim><script type="text/template">
-diff --git a/scream.py b/scream.py
-index 9347315..c12308e 100644
---- a/scream.py
-+++ b/scream.py
-@@ -10,11 +10,11 @@ class ScreamingOutput:
-     def write(self, string):
-         all_caps = string.upper()
-         if self.file:
-             self.file.write(all_caps)
-         else:
--            sys.stdout.write(all_caps)
-+            self.file.write(all_caps)
-</script></code></pre>
-
-<pre class="terminal">
-$ python scream.py
-Traceback (most recent call last):
-  File &quot;/home/jacko/why_rust/scream.py&quot;, line 22, in &lt;module&gt;
-    output.write(&quot;hello world\n&quot;)
-  File &quot;/home/jacko/why_rust/scream.py&quot;, line 15, in write
-    self.file.write(all_caps)
-    ^^^^^^^^^^^^^^^
-AttributeError: &apos;NoneType&apos; object has no attribute &apos;write&apos;
-</pre>
-</div>
 </section>
 
 
