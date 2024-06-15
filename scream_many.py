@@ -9,13 +9,13 @@ class ScreamingOutput:
 
     def write(self, string):
         all_caps = string.upper()
-        if self.file:
+        if self.file is not None:
             self.file.write(all_caps)
         else:
             sys.stdout.write(all_caps)
 
     def close(self):
-        if self.file:
+        if self.file is not None:
             self.file.close()
 
 def open_outputs(paths):
