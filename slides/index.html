@@ -147,16 +147,16 @@ HELLO WORLD
 <div class="rows">
 <pre><code style="font-size: 30pt" class="hljs diff" data-trim><script type="text/template">
 diff --git a/scream.py b/scream.py
-index 9347315..956d791 100644
+index f478eda..a530d3d 100644
 --- a/scream.py
 +++ b/scream.py
-@@ -3,8 +3,5 @@ import sys
- class ScreamingOutput:
+@@ -4,6 +4,3 @@ class ScreamingOutput:
      def __init__(self, path=None):
 -        if path is not None:
-             self.file = open(path, "w")
+-            self.file = open(path, "w")
 -        else:
 -            self.file = None
++        self.file = open(path, "w")
 </script></code></pre>
 
 <pre class="terminal">
@@ -178,25 +178,25 @@ TypeError: expected str, bytes or os.PathLike object, not NoneType
 <div class="rows">
 <pre><code style="font-size: 30pt" class="hljs diff" data-trim><script type="text/template">
 diff --git a/scream.py b/scream.py
-index 9347315..c12308e 100644
+index f478eda..e116153 100644
 --- a/scream.py
 +++ b/scream.py
-@@ -10,11 +10,11 @@ class ScreamingOutput:
+@@ -10,8 +10,5 @@ class ScreamingOutput:
      def write(self, string):
          all_caps = string.upper()
-         if self.file is not None:
-             self.file.write(all_caps)
-         else:
+-        if self.file is not None:
+-            self.file.write(all_caps)
+-        else:
 -            sys.stdout.write(all_caps)
-+            self.file.write(all_caps)
++        self.file.write(all_caps)
 </script></code></pre>
 
 <pre class="terminal">
 $ python scream.py
 Traceback (most recent call last):
-  File &quot;/home/jacko/why_rust/scream.py&quot;, line 22, in &lt;module&gt;
+  File &quot;/home/jacko/why_rust/scream.py&quot;, line 19, in &lt;module&gt;
     output.write(&quot;hello world\n&quot;)
-  File &quot;/home/jacko/why_rust/scream.py&quot;, line 15, in write
+  File &quot;/home/jacko/why_rust/scream.py&quot;, line 12, in write
     self.file.write(all_caps)
     ^^^^^^^^^^^^^^^
 AttributeError: &apos;NoneType&apos; object has no attribute &apos;write&apos;
@@ -304,7 +304,7 @@ fn main() -> Result<()> {
 
 <section><!---------------------------------- SLIDE ----------------------------------------------->
 <div class="rows">
-<pre><code style="font-size: 25pt" class="hljs diff" data-trim><script type="text/template">
+<pre><code style="font-size: 26pt" class="hljs diff" data-trim><script type="text/template">
 diff --git a/scream.rs/src/main.rs b/scream.rs/src/main.rs
 index 94d3414..b8be627 100644
 --- a/scream.rs/src/main.rs
@@ -340,32 +340,34 @@ error[E0277]: the trait bound `Option&lt;&amp;str&gt;: AsRef&lt;Path&gt;` is not
 
 <section><!---------------------------------- SLIDE ----------------------------------------------->
 <div class="rows">
-<pre><code style="font-size: 30pt" class="hljs diff" data-trim><script type="text/template">
+<pre><code style="font-size: 26pt" class="hljs diff" data-trim><script type="text/template">
 diff --git a/scream.rs/src/main.rs b/scream.rs/src/main.rs
-index 94d3414..7852de1 100644
+index 94d3414..f54689a 100644
 --- a/scream.rs/src/main.rs
 +++ b/scream.rs/src/main.rs
-@@ -19,15 +19,15 @@ impl ScreamingOutput {
+@@ -19,12 +19,5 @@ impl ScreamingOutput {
      fn write(&mut self, string: &str) -> Result<()> {
          let all_caps = string.to_uppercase();
-         match self {
-             ScreamingOutput::File { file } => {
-                 file.write_all(all_caps.as_bytes())
-             }
-             ScreamingOutput::Stdout => {
+-        match self {
+-            ScreamingOutput::File { file } => {
+-                file.write_all(all_caps.as_bytes())
+-            }
+-            ScreamingOutput::Stdout => {
 -                stdout().write_all(all_caps.as_bytes())
-+                self.file.write_all(all_caps.as_bytes())
-             }
+-            }
+-        }
++        self.file.write_all(all_caps.as_bytes())
+     }
 </script></code></pre>
 
 <pre class="terminal">
 $ cargo build
    Compiling scream v0.1.0 (/home/jacko/why_rust/scream.rs)
 error[E0609]: no field `file` on type `&amp;mut ScreamingOutput`
-  --&gt; src/main.rs:26:22
+  --&gt; src/main.rs:21:14
    |
-26 |                 self.file.write_all(all_caps.as_bytes())
-   |                      ^^^^ unknown field
+21 |         self.file.write_all(all_caps.as_bytes())
+   |              ^^^^ unknown field
 </pre>
 </div>
 </section>
