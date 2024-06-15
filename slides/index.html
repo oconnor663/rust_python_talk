@@ -106,7 +106,7 @@
 
 <section><!---------------------------------- SLIDE ----------------------------------------------->
 <div class="columns">
-<pre><code style="font-size: 30pt" class="hljs python" data-trim><script type="text/template">
+<pre><code style="font-size: 34pt" class="hljs python" data-trim data-line-numbers="|3-8|10-15|17-22"><script type="text/template">
 import sys
 
 class ScreamingOutput:
@@ -144,36 +144,8 @@ HELLO WORLD
 
 
 <section><!---------------------------------- SLIDE ----------------------------------------------->
-<pre><code class="hljs python scrollable" data-trim data-line-numbers="3-8|10-15|17-22"><script type="text/template">
-import sys
-
-class ScreamingOutput:
-    def __init__(self, path=None):
-        if path is not None:
-            self.file = open(path, "w")
-        else:
-            self.file = None
-
-    def write(self, string):
-        all_caps = string.upper()
-        if self.file:
-            self.file.write(all_caps)
-        else:
-            sys.stdout.write(all_caps)
-
-if len(sys.argv) > 1:
-    output = ScreamingOutput(sys.argv[1])
-else:
-    output = ScreamingOutput()
-
-output.write("hello world\n")
-</script></code></pre>
-</section>
-
-
-<section><!---------------------------------- SLIDE ----------------------------------------------->
 <div class="columns">
-<pre><code style="font-size: 20pt" class="hljs rust" data-trim><script type="text/template">
+<pre><code style="font-size: 21pt" class="hljs rust" data-trim><script type="text/template">
 use std::io::{stdout, Result, Write};
 
 enum ScreamingOutput {
@@ -407,7 +379,7 @@ error[E0609]: no field `file` on type `&amp;mut ScreamingOutput`
 
 
 <section><!---------------------------------- SLIDE ----------------------------------------------->
-<pre><code class="hljs python scrollable" data-trim data-line-numbers="17-19|27"><script type="text/template">
+<pre><code class="hljs python scrollable" data-trim data-line-numbers="17-19,27"><script type="text/template">
 import sys
 
 class ScreamingOutput:
