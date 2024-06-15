@@ -2,7 +2,7 @@ fn main() {
     let mut functions = Vec::new();
 
     for i in 0..10 {
-        // OOPS: This captures i by reference.
+        // error: `i` does not live long enough
         functions.push(|| println!("{i}"));
     }
 

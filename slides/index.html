@@ -837,7 +837,7 @@ fn main() {
 
 <section><!---------------------------------- SLIDE ----------------------------------------------->
 <div class="columns">
-<pre><code style="font-size: 36pt" class="hljs python" data-trim data-line-numbers="|6-7,10"><script type="text/template">
+<pre><code style="font-size: 36pt" class="hljs python" data-trim data-line-numbers="|10|6-7"><script type="text/template">
 class Person:
     def __init__(self, foods):
         self.favorite_foods = foods
@@ -879,6 +879,55 @@ fn main() {
         favorite_foods: vec!["apples"],
     };
     alice.add_favorites(&alice); // error: cannot borrow `alice` as mutable
+}
+</script></code></pre>
+</div>
+</section>
+
+
+<section><!---------------------------------- SLIDE ----------------------------------------------->
+<div class="columns">
+<pre><code style="font-size: 40pt" class="hljs python" data-trim><script type="text/template">
+functions = []
+
+for i in range(10):
+    functions.append(lambda: print(i))
+
+for f in functions:
+    f()
+</script></code></pre>
+
+<pre class="terminal">
+$ python capture.py 
+9
+9
+9
+9
+9
+9
+9
+9
+9
+9
+</pre>
+</div>
+</section>
+
+
+<section><!---------------------------------- SLIDE ----------------------------------------------->
+<div class="columns">
+<pre><code style="font-size: 40pt" class="hljs rust" data-trim><script type="text/template">
+fn main() {
+    let mut functions = Vec::new();
+
+    for i in 0..10 {
+        // error: `i` does not live long enough
+        functions.push(|| println!("{i}"));
+    }
+
+    for f in functions {
+        f();
+    }
 }
 </script></code></pre>
 </div>
