@@ -982,7 +982,7 @@ $ cargo run -q
 <div class="columns">
 <pre><code style="font-size: 40pt" class="hljs rust" data-trim data-line-numbers="8-10"><script type="text/template">
 use std::ops::DerefMut;
-use std::sync::Mutex;
+use std::sync::{Mutex, MutexGuard};
 
 static X: Mutex<i32> = Mutex::new(0);
 
