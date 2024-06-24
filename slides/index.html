@@ -362,6 +362,37 @@ error[E0609]: no field `file` on type `&amp;mut ScreamingOutput`
 
 <section><!---------------------------------- SLIDE ----------------------------------------------->
 <div class="rows">
+<pre><code style="font-size: 26pt" class="hljs diff" data-trim><script type="text/template">
+diff --git a/scream.rs/src/main.rs b/scream.rs/src/main.rs
+index 94d3414..e3d319e 100644
+--- a/scream.rs/src/main.rs
++++ b/scream.rs/src/main.rs
+@@ -3,3 +3,6 @@ use std::io::{stdout, Result, Write};
+ enum ScreamingOutput {
+-    File { file: std::fs::File },
++    File {
++        file: std::fs::File,
++        path: std::path::PathBuf,
++    },
+     Stdout,
+ }
+</script></code></pre>
+
+<pre class="terminal">
+$ cargo build
+   Compiling scream v0.1.0 (/home/jacko/why_rust/scream.rs)
+error[E0063]: missing field `path` in initializer of `ScreamingOutput`
+  --> src/main.rs:16:20
+   |
+16 |                 Ok(ScreamingOutput::File { file })
+   |                    ^^^^^^^^^^^^^^^^^^^^^ missing `path`
+</pre>
+</div>
+</section>
+
+
+<section><!---------------------------------- SLIDE ----------------------------------------------->
+<div class="rows">
 <h1>Destructors</h1>
 </div>
 </section>
