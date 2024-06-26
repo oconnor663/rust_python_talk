@@ -411,6 +411,90 @@ error[E0063]: missing field `path` in initializer of `ScreamingOutput`
 
 
 <section><!---------------------------------- SLIDE ----------------------------------------------->
+<div class="columns">
+<pre><code style="font-size: 40pt" class="hljs python" data-trim><script type="text/template">
+def look_at_file_descriptors():
+    output1 = ScreamingOutput("/dev/null")
+    output2 = ScreamingOutput("/dev/null")
+    print(output1.file.fileno(),
+          output2.file.fileno())
+
+look_at_file_descriptors()
+look_at_file_descriptors()
+look_at_file_descriptors()
+</script></code></pre>
+
+<div>
+<pre class="terminal" style="font-size: 40pt">
+$ python look.py
+3 4
+3 4
+3 4
+</pre>
+<br/>
+<pre class="terminal" style="font-size: 40pt">
+$ pypy3 look.py
+3 4
+5 6
+7 8
+</pre>
+<br/>
+<pre class="terminal" style="font-size: 40pt">
+$ micropython look.py
+3 4
+5 6
+7 8
+</pre>
+</div>
+</div>
+</section>
+
+
+<section><!---------------------------------- SLIDE ----------------------------------------------->
+<div class="columns">
+<pre><code style="font-size: 40pt" class="hljs python" data-trim data-line-numbers="6-9"><script type="text/template">
+def look_at_file_descriptors():
+    output1 = ScreamingOutput("/dev/null")
+    output2 = ScreamingOutput("/dev/null")
+    print(output1.file.fileno(),
+          output2.file.fileno())
+    silly_map1 = {"output": output1}
+    silly_map2 = {"output": output2}
+    silly_map1["other_map"] = silly_map2
+    silly_map2["other_map"] = silly_map1
+
+look_at_file_descriptors()
+look_at_file_descriptors()
+look_at_file_descriptors()
+</script></code></pre>
+
+<div>
+<pre class="terminal" style="font-size: 40pt">
+$ python look.py
+3 4
+5 6
+7 8
+</pre>
+<br/>
+<pre class="terminal" style="font-size: 40pt">
+$ pypy3 look.py
+3 4
+5 6
+7 8
+</pre>
+<br/>
+<pre class="terminal" style="font-size: 40pt">
+$ micropython look.py
+3 4
+5 6
+7 8
+</pre>
+</div>
+</div>
+</section>
+
+
+<section><!---------------------------------- SLIDE ----------------------------------------------->
 <pre><code class="hljs python scrollable" data-trim data-line-numbers="17-19,27"><script type="text/template">
 import sys
 
