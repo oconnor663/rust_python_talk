@@ -416,6 +416,49 @@ error[E0063]: missing field `path` in initializer of `ScreamingOutput`
 
 
 <section><!---------------------------------- SLIDE ----------------------------------------------->
+<pre><code class="hljs rust scrollable" data-trim data-line-numbers="4|34,37"><script type="text/template">
+use std::io::{self, stdout, Write};
+
+enum ScreamingOutput {
+    File { file: std::fs::File },
+    Stdout,
+}
+
+impl ScreamingOutput {
+    fn new(maybe_path: Option<&str>) -> io::Result<ScreamingOutput> {
+        match maybe_path {
+            Some(path) => {
+                let file = std::fs::File::create(path)?;
+                Ok(ScreamingOutput::File { file })
+            }
+            None => Ok(ScreamingOutput::Stdout),
+        }
+    }
+
+    fn write(&mut self, string: &str) -> io::Result<()> {
+        let all_caps = string.to_uppercase();
+        match self {
+            ScreamingOutput::File { file } => {
+                file.write_all(all_caps.as_bytes())
+            }
+            ScreamingOutput::Stdout => {
+                stdout().write_all(all_caps.as_bytes())
+            }
+        }
+    }
+}
+
+fn main() -> io::Result<()> {
+    let path = std::env::args().nth(1);
+    let mut output = ScreamingOutput::new(path.as_deref())?;
+    output.write("hello world\n")?;
+    Ok(())
+}
+</script></code></pre>
+</section>
+
+
+<section><!---------------------------------- SLIDE ----------------------------------------------->
 <div class="columns">
 <pre><code style="font-size: 40pt" class="hljs python" data-trim><script type="text/template">
 def look_at_file_descriptors():
