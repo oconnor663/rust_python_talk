@@ -212,7 +212,7 @@ AttributeError: &apos;NoneType&apos; object has no attribute &apos;write&apos;
 <section><!---------------------------------- SLIDE ----------------------------------------------->
 <div class="columns">
 <pre><code style="font-size: 21pt" class="hljs rust" data-trim data-line-numbers="2"><script type="text/template">
-use std::io::{stdout, Result, Write};
+use std::io::{self, stdout, Write};
 
 enum ScreamingOutput {
     File { file: std::fs::File },
@@ -220,7 +220,7 @@ enum ScreamingOutput {
 }
 
 impl ScreamingOutput {
-    fn new(maybe_path: Option<&str>) -> Result<ScreamingOutput> {
+    fn new(maybe_path: Option<&str>) -> io::Result<ScreamingOutput> {
         match maybe_path {
             Some(path) => {
                 let file = std::fs::File::create(path)?;
@@ -230,7 +230,7 @@ impl ScreamingOutput {
         }
     }
 
-    fn write(&mut self, string: &str) -> Result<()> {
+    fn write(&mut self, string: &str) -> io::Result<()> {
         let all_caps = string.to_uppercase();
         match self {
             ScreamingOutput::File { file } => {
@@ -243,7 +243,7 @@ impl ScreamingOutput {
     }
 }
 
-fn main() -> Result<()> {
+fn main() -> io::Result<()> {
     let path = std::env::args().nth(1);
     let mut output = ScreamingOutput::new(path.as_deref())?;
     output.write("hello world\n")?;
@@ -265,7 +265,7 @@ HELLO WORLD
 
 <section><!---------------------------------- SLIDE ----------------------------------------------->
 <pre><code class="hljs rust scrollable" data-trim data-line-numbers="3-6|9-17|19-29|33-35"><script type="text/template">
-use std::io::{stdout, Result, Write};
+use std::io::{self, stdout, Write};
 
 enum ScreamingOutput {
     File { file: std::fs::File },
@@ -273,7 +273,7 @@ enum ScreamingOutput {
 }
 
 impl ScreamingOutput {
-    fn new(maybe_path: Option<&str>) -> Result<ScreamingOutput> {
+    fn new(maybe_path: Option<&str>) -> io::Result<ScreamingOutput> {
         match maybe_path {
             Some(path) => {
                 let file = std::fs::File::create(path)?;
@@ -283,7 +283,7 @@ impl ScreamingOutput {
         }
     }
 
-    fn write(&mut self, string: &str) -> Result<()> {
+    fn write(&mut self, string: &str) -> io::Result<()> {
         let all_caps = string.to_uppercase();
         match self {
             ScreamingOutput::File { file } => {
@@ -296,7 +296,7 @@ impl ScreamingOutput {
     }
 }
 
-fn main() -> Result<()> {
+fn main() -> io::Result<()> {
     let path = std::env::args().nth(1);
     let mut output = ScreamingOutput::new(path.as_deref())?;
     output.write("hello world\n")?;
@@ -314,7 +314,7 @@ index 94d3414..b8be627 100644
 --- a/scream.rs/src/main.rs
 +++ b/scream.rs/src/main.rs
 @@ -9,9 +9,4 @@ impl ScreamingOutput {
-     fn new(maybe_path: Option<&str>) -> Result<ScreamingOutput> {
+     fn new(maybe_path: Option<&str>) -> io::Result<ScreamingOutput> {
 -        match maybe_path {
 -            Some(path) => {
 -                let file = std::fs::File::create(path)?;
@@ -350,7 +350,7 @@ index 94d3414..f54689a 100644
 --- a/scream.rs/src/main.rs
 +++ b/scream.rs/src/main.rs
 @@ -19,12 +19,5 @@ impl ScreamingOutput {
-     fn write(&mut self, string: &str) -> Result<()> {
+     fn write(&mut self, string: &str) -> io::Result<()> {
          let all_caps = string.to_uppercase();
 -        match self {
 -            ScreamingOutput::File { file } => {
@@ -384,7 +384,7 @@ diff --git a/scream.rs/src/main.rs b/scream.rs/src/main.rs
 index 94d3414..e3d319e 100644
 --- a/scream.rs/src/main.rs
 +++ b/scream.rs/src/main.rs
-@@ -3,3 +3,6 @@ use std::io::{stdout, Result, Write};
+@@ -3,3 +3,6 @@ use std::io::{self, stdout, Write};
  enum ScreamingOutput {
 -    File { file: std::fs::File },
 +    File {
@@ -670,7 +670,7 @@ finally:
 <section><!---------------------------------- SLIDE ----------------------------------------------->
 <div class="columns">
 <pre><code style="font-size: 17pt" class="hljs rust" data-trim data-line-numbers="2"><script type="text/template">
-use std::io::{stdout, Result, Write};
+use std::io::{self, stdout, Write};
 
 enum ScreamingOutput {
     File { file: std::fs::File },
@@ -678,7 +678,7 @@ enum ScreamingOutput {
 }
 
 impl ScreamingOutput {
-    fn new(maybe_path: Option<&str>) -> Result<ScreamingOutput> {
+    fn new(maybe_path: Option<&str>) -> io::Result<ScreamingOutput> {
         match maybe_path {
             Some(path) => {
                 let file = std::fs::File::create(path)?;
@@ -688,7 +688,7 @@ impl ScreamingOutput {
         }
     }
 
-    fn write(&mut self, string: &str) -> Result<()> {
+    fn write(&mut self, string: &str) -> io::Result<()> {
         let all_caps = string.to_uppercase();
         match self {
             ScreamingOutput::File { file } => {
@@ -701,7 +701,7 @@ impl ScreamingOutput {
     }
 }
 
-fn open_outputs(paths: &[String]) -> Result<Vec<ScreamingOutput>> {
+fn open_outputs(paths: &[String]) -> io::Result<Vec<ScreamingOutput>> {
     let mut outputs = Vec::new();
     for path in paths {
         outputs.push(ScreamingOutput::new(Some(path))?);
@@ -709,7 +709,7 @@ fn open_outputs(paths: &[String]) -> Result<Vec<ScreamingOutput>> {
     Ok(outputs)
 }
 
-fn main() -> Result<()> {
+fn main() -> io::Result<()> {
     let paths: Vec<String> = std::env::args().skip(1).collect();
     let mut outputs = open_outputs(&paths)?;
     for output in &mut outputs {
@@ -734,7 +734,7 @@ HELLO WORLD
 
 <section><!---------------------------------- SLIDE ----------------------------------------------->
 <pre><code class="hljs rust scrollable" data-trim data-line-numbers="32-38|41-45"><script type="text/template">
-use std::io::{stdout, Result, Write};
+use std::io::{self, stdout, Write};
 
 enum ScreamingOutput {
     File { file: std::fs::File },
@@ -742,7 +742,7 @@ enum ScreamingOutput {
 }
 
 impl ScreamingOutput {
-    fn new(maybe_path: Option<&str>) -> Result<ScreamingOutput> {
+    fn new(maybe_path: Option<&str>) -> io::Result<ScreamingOutput> {
         match maybe_path {
             Some(path) => {
                 let file = std::fs::File::create(path)?;
@@ -752,7 +752,7 @@ impl ScreamingOutput {
         }
     }
 
-    fn write(&mut self, string: &str) -> Result<()> {
+    fn write(&mut self, string: &str) -> io::Result<()> {
         let all_caps = string.to_uppercase();
         match self {
             ScreamingOutput::File { file } => {
@@ -765,7 +765,7 @@ impl ScreamingOutput {
     }
 }
 
-fn open_outputs(paths: &[String]) -> Result<Vec<ScreamingOutput>> {
+fn open_outputs(paths: &[String]) -> io::Result<Vec<ScreamingOutput>> {
     let mut outputs = Vec::new();
     for path in paths {
         outputs.push(ScreamingOutput::new(Some(path))?);
@@ -773,7 +773,7 @@ fn open_outputs(paths: &[String]) -> Result<Vec<ScreamingOutput>> {
     Ok(outputs)
 }
 
-fn main() -> Result<()> {
+fn main() -> io::Result<()> {
     let paths: Vec<String> = std::env::args().skip(1).collect();
     let mut outputs = open_outputs(&paths)?;
     for output in &mut outputs {

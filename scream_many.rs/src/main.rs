@@ -1,4 +1,4 @@
-use std::io::{stdout, Result, Write};
+use std::io::{self, stdout, Write};
 
 enum ScreamingOutput {
     File { file: std::fs::File },
@@ -6,7 +6,7 @@ enum ScreamingOutput {
 }
 
 impl ScreamingOutput {
-    fn new(maybe_path: Option<&str>) -> Result<ScreamingOutput> {
+    fn new(maybe_path: Option<&str>) -> io::Result<ScreamingOutput> {
         match maybe_path {
             Some(path) => {
                 let file = std::fs::File::create(path)?;
@@ -16,7 +16,7 @@ impl ScreamingOutput {
         }
     }
 
-    fn write(&mut self, string: &str) -> Result<()> {
+    fn write(&mut self, string: &str) -> io::Result<()> {
         let all_caps = string.to_uppercase();
         match self {
             ScreamingOutput::File { file } => {
@@ -29,7 +29,7 @@ impl ScreamingOutput {
     }
 }
 
-fn open_outputs(paths: &[String]) -> Result<Vec<ScreamingOutput>> {
+fn open_outputs(paths: &[String]) -> io::Result<Vec<ScreamingOutput>> {
     let mut outputs = Vec::new();
     for path in paths {
         outputs.push(ScreamingOutput::new(Some(path))?);
@@ -37,7 +37,7 @@ fn open_outputs(paths: &[String]) -> Result<Vec<ScreamingOutput>> {
     Ok(outputs)
 }
 
-fn main() -> Result<()> {
+fn main() -> io::Result<()> {
     let paths: Vec<String> = std::env::args().skip(1).collect();
     let mut outputs = open_outputs(&paths)?;
     for output in &mut outputs {
