@@ -19,6 +19,7 @@ def add_500k():
     for _ in range(500_000):
         with X as x:
             x[0] += int(1)
+        x[0] += int(1)
 
 thread1 = Thread(target=add_500k)
 thread1.start()

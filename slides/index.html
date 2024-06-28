@@ -1278,18 +1278,17 @@ index f111a3e..7f7d447 100644
 @@ -19,5 +19,6 @@ def add_500k():
      for _ in range(500_000):
          with X as x:
--            x[0] += int(1)
-+            pass
+             x[0] += int(1)
 +        x[0] += int(1)
 </script></code></pre>
 
 <pre class="terminal">
 $ python million_owning.py
-1000000
+2000000
 $ python million_owning.py
-994170
+1984541
 $ python million_owning.py
-1000000
+2000000
 </pre>
 </div>
 </section>
