@@ -381,10 +381,10 @@ error[E0609]: no field `file` on type `&amp;mut ScreamingOutput`
 <div class="rows">
 <pre><code style="font-size: 26pt" class="hljs diff" data-trim><script type="text/template">
 diff --git a/scream.rs/src/main.rs b/scream.rs/src/main.rs
-index 94d3414..e3d319e 100644
+index c420906..3fc1109 100644
 --- a/scream.rs/src/main.rs
 +++ b/scream.rs/src/main.rs
-@@ -3,3 +3,6 @@ use std::io::{self, stdout, Write};
+@@ -3,4 +3,8 @@ use std::io::{self, stdout, Write};
  enum ScreamingOutput {
 -    File { file: std::fs::File },
 +    File {
@@ -392,17 +392,24 @@ index 94d3414..e3d319e 100644
 +        path: std::path::PathBuf,
 +    },
      Stdout,
++    Stderr,
  }
 </script></code></pre>
 
-<pre class="terminal">
+<pre class="terminal" style="font-size: 26pt">
 $ cargo build
    Compiling scream v0.1.0 (/home/jacko/why_rust/scream.rs)
 error[E0063]: missing field `path` in initializer of `ScreamingOutput`
-  --> src/main.rs:16:20
+  --> src/main.rs:17:20
    |
-16 |                 Ok(ScreamingOutput::File { file })
+17 |                 Ok(ScreamingOutput::File { file })
    |                    ^^^^^^^^^^^^^^^^^^^^^ missing `path`
+
+error[E0004]: non-exhaustive patterns: `&mut ScreamingOutput::Stderr` not covered
+  --> src/main.rs:25:15
+   |
+25 |         match self {
+   |               ^^^^ pattern `&mut ScreamingOutput::Stderr` not covered
 </pre>
 </div>
 </section>
