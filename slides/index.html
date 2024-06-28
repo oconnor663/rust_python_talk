@@ -837,6 +837,41 @@ fn main() -> io::Result<()> {
 
 <section><!---------------------------------- SLIDE ----------------------------------------------->
 <div class="rows">
+<pre><code style="font-size: 26pt" class="hljs diff" data-trim><script type="text/template">
+diff --git a/scream_many.rs/src/main.rs b/scream_many.rs/src/main.rs
+index 19cb48e..1060bca 100644
+--- a/scream_many.rs/src/main.rs
++++ b/scream_many.rs/src/main.rs
+@@ -32,7 +32,7 @@ impl ScreamingOutput {
+-fn open_outputs(paths: &[String]) -> io::Result<Vec<ScreamingOutput>> {
++fn open_outputs(paths: &[String]) -> io::Result<&Vec<ScreamingOutput>> {
+     let mut outputs = Vec::new();
+     for path in paths {
+         outputs.push(ScreamingOutput::new(Some(path))?);
+     }
+-    Ok(outputs)
++    Ok(&outputs)
+ }
+</script></code></pre>
+
+<pre class="terminal">
+$ cargo build
+   Compiling scream_many v0.1.0 (/home/jacko/why_rust/scream_many.rs)
+error[E0515]: cannot return value referencing local variable `outputs`
+  --> src/main.rs:37:5
+   |
+37 |     Ok(&outputs)
+   |     ^^^--------^
+   |     |  |
+   |     |  `outputs` is borrowed here
+   |     returns a value referencing data owned by the current function
+</pre>
+</div>
+</section>
+
+
+<section><!---------------------------------- SLIDE ----------------------------------------------->
+<div class="rows">
 <h1>Aliasing</h1>
 </div>
 </section>
