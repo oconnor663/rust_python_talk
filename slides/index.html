@@ -1132,7 +1132,7 @@ static X: Mutex<i32> = Mutex::new(0);
 
 fn add_500k() {
     for _ in 0..500_000 {
-        *X.lock().unwrap() += 1
+        *X.lock().unwrap() += 1;
     }
 }
 
@@ -1304,7 +1304,7 @@ index 3114179..1d3aa03 100644
 +++ b/million/million.rs
 @@ -6,3 +7,4 @@ fn add_500k() {
      for _ in 0..500_000 {
--        *X.lock().unwrap() += 1
+-        *X.lock().unwrap() += 1;
 +        let x = X.lock().unwrap().deref_mut();
 +        *x += 1;
      }

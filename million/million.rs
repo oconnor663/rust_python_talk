@@ -4,7 +4,7 @@ static X: Mutex<i32> = Mutex::new(0);
 
 fn add_500k() {
     for _ in 0..500_000 {
-        *X.lock().unwrap() += 1
+        *X.lock().unwrap() += 1;
     }
 }
 
