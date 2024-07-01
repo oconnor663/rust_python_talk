@@ -946,7 +946,35 @@ alice: ['donuts', 'apples', 'bananas']
 
 <section><!---------------------------------- SLIDE ----------------------------------------------->
 <div class="columns">
-<pre><code style="font-size: 36pt" class="hljs rust" data-trim data-line-numbers="|9,14"><script type="text/template">
+<pre><code style="font-size: 36pt" class="hljs python" data-trim data-line-numbers="7,10"><script type="text/template">
+class Person:
+    def __init__(self, foods):
+        self.favorite_foods = foods
+
+donuts = ["donuts"]
+
+alice = Person(list(donuts))
+alice.favorite_foods.append("apples")
+
+bob = Person(list(donuts))
+bob.favorite_foods.append("bananas")
+
+print("alice:", alice.favorite_foods);
+print("  bob:", bob.favorite_foods);
+</script></code></pre>
+
+<pre class="terminal">
+$ python accidental_sharing.py
+alice: ['donuts', 'apples']
+  bob: ['donuts', 'bananas']
+</pre>
+</div>
+</section>
+
+
+<section><!---------------------------------- SLIDE ----------------------------------------------->
+<div class="columns">
+<pre><code style="font-size: 36pt" class="hljs rust" data-trim data-line-numbers="9,14"><script type="text/template">
 struct Person {
     favorite_foods: Vec<&'static str>,
 }
@@ -974,7 +1002,7 @@ fn main() {
 
 <section><!---------------------------------- SLIDE ----------------------------------------------->
 <div class="columns">
-<pre><code style="font-size: 36pt" class="hljs rust" data-trim data-line-numbers="|9,15|11-12,17-18"><script type="text/template">
+<pre><code style="font-size: 36pt" class="hljs rust" data-trim data-line-numbers="9,15|11-12,17-18"><script type="text/template">
 struct Person<'food> {
     favorite_foods: &'food Vec<&'static str>,
 }
@@ -1004,7 +1032,7 @@ fn main() {
 
 <section><!---------------------------------- SLIDE ----------------------------------------------->
 <div class="columns">
-<pre><code style="font-size: 36pt" class="hljs rust" data-trim data-line-numbers="|8-9,13-14"><script type="text/template">
+<pre><code style="font-size: 36pt" class="hljs rust" data-trim data-line-numbers="8-9,13-14"><script type="text/template">
 struct Person<'food> {
     favorite_foods: &'food mut Vec<&'static str>,
 }
@@ -1026,6 +1054,40 @@ fn main() {
     println!("{:?}", bob.favorite_foods);
 }
 </script></code></pre>
+</div>
+</section>
+
+
+<section><!---------------------------------- SLIDE ----------------------------------------------->
+<div class="columns">
+<pre><code style="font-size: 36pt" class="hljs rust" data-trim data-line-numbers="9,14"><script type="text/template">
+struct Person {
+    favorite_foods: Vec<&'static str>,
+}
+
+fn main() {
+    let donuts = vec!["donuts"];
+
+    let mut alice = Person {
+        favorite_foods: donuts.clone(),
+    };
+    alice.favorite_foods.push("apples");
+
+    let mut bob = Person {
+        favorite_foods: donuts.clone(),
+    };
+    bob.favorite_foods.push("bananas");
+
+    println!("{:?}", alice.favorite_foods);
+    println!("{:?}", bob.favorite_foods);
+}
+</script></code></pre>
+
+<pre class="terminal">
+$ cargo run -q
+["donuts", "apples"]
+["donuts", "bananas"]
+</pre>
 </div>
 </section>
 
