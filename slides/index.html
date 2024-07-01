@@ -62,6 +62,26 @@
             text-decoration: underline;
         }
 
+        img.logo {
+            width: 300px;
+            margin: 0 50px;
+        }
+
+        .logos_row {
+            height: 400px;
+        }
+
+        ul {
+            font-size: 60pt;
+        }
+        li {
+            margin-top: 0.2em;
+        }
+        li.strike {
+            text-decoration: line-through;
+            opacity: 0.6;
+        }
+
         </style>
     </head>
     <body>
@@ -73,30 +93,49 @@
 <div class="rows">
 <div>
 <h1>Why use Rust when Python is easier?</h1>
-<h2>
-A close look at
+<p style="font-size: 50pt">
+How
 <span class="underline">enums</span>,
 <span class="underline">destructors</span>,
 and
-<span class="underline">aliasing</span>
-</h2>
+<span class="underline">aliasing rules</span>
+<br>
+help us write clean code and catch bugs
+</p>
 </div>
 </section>
 
 
 <section><!---------------------------------- SLIDE ----------------------------------------------->
 <div class="rows">
-<div style="text-align: left; width: 1250px; font-size: 50pt">
-<p>We're talking about programs that are a <strong>good fit for Python</strong>:
-small-to-medium-size programs where speed isn't critical.</p>
-<p>
-<span class="underline">Enums</span>,
-<span class="underline">destructors</span>,
-and
-<span class="underline">aliasing rules</span>
-make these programs clearer and catch common bugs.
-</p>
+<div class="logos_row">
+<img src="The_C_Programming_Language_logo.svg" class="logo">
+<img src="ISO_C++_Logo.svg" class="logo">
 </div>
+<ul>
+<li>maximum speed</li>
+<li>memory safety</li>
+<li>clean code</li>
+<li>bugs</li>
+</ul>
+</div>
+</section>
+
+
+<section><!---------------------------------- SLIDE ----------------------------------------------->
+<div class="rows">
+<div class="logos_row">
+<img src="python-logo-only.svg#svgView(preserveAspectRatio(xMaxYMax))" class="logo">
+<img src="Java_programming_language_logo.svg" class="logo">
+<img src="gopher.svg" class="logo">
+<img src="Unofficial_JavaScript_logo_2.svg" class="logo">
+</div>
+<ul>
+<li class="strike">maximum speed</li>
+<li class="strike">memory safety</li>
+<li>clean code</li>
+<li>bugs</li>
+</ul>
 </div>
 </section>
 
