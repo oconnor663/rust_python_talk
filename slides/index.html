@@ -4,7 +4,7 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-        <title>Why use Rust when Python is easier?</title>
+        <title>Rust is Competing with Python</title>
 
         <link rel="stylesheet" href="dist/reset.css">
         <link rel="stylesheet" href="dist/reveal.css">
@@ -71,8 +71,8 @@
         .logos_row {
         }
 
-        ul {
-            font-size: 60pt;
+        p, ul {
+            font-size: 50pt;
         }
         li {
             margin-top: 0.2em;
@@ -80,6 +80,11 @@
         .strike {
             text-decoration: line-through;
             opacity: 0.6;
+        }
+
+        .fire {
+            /* https://cssdeck.com/blog/create-a-burning-text-effect-with-css3/ */
+            text-shadow: 0px -2px 4px #fff, 0px -2px 10px #FF3, 0px -10px 20px #F90, 0px -20px 40px #C33;
         }
 
         </style>
@@ -92,8 +97,8 @@
 <section><!---------------------------------- SLIDE ----------------------------------------------->
 <div class="rows">
 <div>
-<h1>Why use Rust when Python is easier?</h1>
-<p style="font-size: 50pt">
+<h1>Rust is Competing with Python</h1>
+<p>
 How
 <span class="underline">enums</span>,
 <span class="underline">destructors</span>,
@@ -112,12 +117,13 @@ help us write clean code and catch bugs
 <img src="The_C_Programming_Language_logo.svg" class="logo">
 <img src="ISO_C++_Logo.svg" class="logo">
 </div>
+<div>
 <ul>
-<li>maximum speed</li>
+<li><span class="fire">blazing</span> speed</li>
+<li>bare metal</li>
 <li>memory safety</li>
-<li>clean code</li>
-<li>catch bugs</li>
 </ul>
+</div>
 </div>
 </section>
 
@@ -130,12 +136,12 @@ help us write clean code and catch bugs
 <img src="gopher.svg" class="logo">
 <img src="Unofficial_JavaScript_logo_2.svg" class="logo">
 </div>
+<div>
 <ul>
-<li class="strike">maximum speed</li>
-<li class="strike">memory safety</li>
-<li>clean code</li>
+<li>write clean code</li>
 <li>catch bugs</li>
 </ul>
+</div>
 </div>
 </section>
 
