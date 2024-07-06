@@ -23,11 +23,11 @@ def open_outputs(paths):
     try:
         for path in paths:
             outputs.append(ScreamingOutput(path))
+        return outputs
     except Exception:
         for output in outputs:
             output.close()
         raise
-    return outputs
 
 outputs = open_outputs(sys.argv[1:])
 try:
