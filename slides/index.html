@@ -723,7 +723,7 @@ finally:
 </script></code></pre>
 
 <pre class="terminal">
-$ python scream.py /tmp/o1 /tmp/o2 /tmp/o3
+$ python scream_many.py /tmp/o1 /tmp/o2 /tmp/o3
 $ cat /tmp/o1
 HELLO WORLD
 $ cat /tmp/o2
@@ -960,7 +960,7 @@ print("  bob:", bob.favorite_foods);
 
 <div style="width: 800px">
 <pre class="terminal">
-$ python accidental_sharing.py
+$ python food.py
 alice: ['donuts', 'apples', 'bananas']
   bob: ['donuts', 'apples', 'bananas']
 </pre>
@@ -990,7 +990,7 @@ print("  bob:", bob.favorite_foods);
 
 <div style="width: 800px">
 <pre class="terminal" style="width: fit-content">
-$ python accidental_sharing.py
+$ python food.py
 alice: ['donuts', 'apples']
   bob: ['donuts', 'bananas']
 </pre>
@@ -1135,7 +1135,7 @@ alice.add_favorites(alice)
 </script></code></pre>
 
 <pre class="terminal">
-$ python aliasing_self.py
+$ python circular.py
 ▯
 Killed
 </pre>
