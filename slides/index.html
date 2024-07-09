@@ -62,13 +62,28 @@
             text-decoration: underline;
         }
 
-        img.logo {
+        .logos_row {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-evenly;
+        }
+
+        .logos_row .logo {
             height: 400px;
             max-width: 400px;
             margin: 0 50px;
         }
 
-        .logos_row {
+        .small_logos_row {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-evenly;
+        }
+
+        .small_logos_row .logo {
+            height: 300px;
+            max-width: 300px;
+            margin: 0 50px;
         }
 
         p, ul {
@@ -130,11 +145,17 @@ help us write clean code and catch bugs
 
 <section><!---------------------------------- SLIDE ----------------------------------------------->
 <div class="rows">
-<div class="logos_row">
+<div>
+<div class="small_logos_row">
 <img src="python-logo-only.svg#svgView(preserveAspectRatio(xMaxYMax))" class="logo">
-<img src="Java_programming_language_logo.svg" class="logo">
-<img src="gopher.svg" class="logo">
 <img src="Unofficial_JavaScript_logo_2.svg" class="logo">
+<img src="Ruby_logo.svg" class="logo">
+</div>
+<div class="small_logos_row" style="margin-top: 50px">
+<img src="gopher.svg" class="logo">
+<img src="Java_programming_language_logo.svg" class="logo">
+<img src="c_sharp_logo.svg" class="logo">
+</div>
 </div>
 <div>
 <ul style="width: 475px">
