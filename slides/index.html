@@ -954,6 +954,26 @@ error[E0515]: cannot return value referencing local variable `outputs`
 
 
 <section><!---------------------------------- SLIDE ----------------------------------------------->
+<div class="columns">
+<pre><code style="font-size: 40pt" class="hljs rust" data-trim><script type="text/template">
+use std::sync::{Mutex, MutexGuard};
+
+fn add_one_to_smallest(ints: &[Mutex<i32>]) {
+    let mut smallest: MutexGuard<i32> = ints[0].lock().unwrap();
+    for i in 1..ints.len() {
+        let next: MutexGuard<i32> = ints[i].lock().unwrap();
+        if *next < *smallest {
+            smallest = next;
+        }
+    }
+    *smallest += 1;
+}
+</script></code></pre>
+</div>
+</section>
+
+
+<section><!---------------------------------- SLIDE ----------------------------------------------->
 <div class="rows">
 <h1>Aliasing</h1>
 </div>
