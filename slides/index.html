@@ -919,41 +919,6 @@ fn main() -> io::Result<()> {
 
 
 <section><!---------------------------------- SLIDE ----------------------------------------------->
-<div class="rows">
-<pre><code style="font-size: 26pt" class="hljs diff" data-trim><script type="text/template">
-diff --git a/scream_many.rs/src/main.rs b/scream_many.rs/src/main.rs
-index 19cb48e..1060bca 100644
---- a/scream_many.rs/src/main.rs
-+++ b/scream_many.rs/src/main.rs
-@@ -32,7 +32,7 @@ impl ScreamingOutput {
--fn open_outputs(paths: &[String]) -> io::Result<Vec<ScreamingOutput>> {
-+fn open_outputs(paths: &[String]) -> io::Result<&Vec<ScreamingOutput>> {
-     let mut outputs = Vec::new();
-     for path in paths {
-         outputs.push(ScreamingOutput::new(Some(path))?);
-     }
--    Ok(outputs)
-+    Ok(&outputs)
- }
-</script></code></pre>
-
-<pre class="terminal">
-$ cargo build
-   Compiling scream_many v0.1.0 (/home/jacko/why_rust/scream_many.rs)
-error[E0515]: cannot return value referencing local variable `outputs`
-  --> src/main.rs:37:5
-   |
-37 |     Ok(&outputs)
-   |     ^^^--------^
-   |     |  |
-   |     |  `outputs` is borrowed here
-   |     returns a value referencing data owned by the current function
-</pre>
-</div>
-</section>
-
-
-<section><!---------------------------------- SLIDE ----------------------------------------------->
 <div class="columns">
 <pre><code style="font-size: 40pt" class="hljs rust" data-trim><script type="text/template">
 use std::sync::{Mutex, MutexGuard};
@@ -969,6 +934,44 @@ fn add_one_to_smallest(ints: &[Mutex<i32>]) {
     *smallest += 1;
 }
 </script></code></pre>
+</div>
+</section>
+
+
+<section><!---------------------------------- SLIDE ----------------------------------------------->
+<div class="rows">
+<pre><code style="font-size: 26pt" class="hljs diff" data-trim><script type="text/template">
+diff --git a/add_one_to_smallest.rs b/add_one_to_smallest.rs
+index 9a7f193..2cfd33c 100644
+--- a/add_one_to_smallest.rs
++++ b/add_one_to_smallest.rs
+@@ -5,7 +5,7 @@ fn add_one_to_smallest(ints: &[Mutex<i32>]) {
+     for i in 1..ints.len() {
+         let next: MutexGuard<i32> = ints[i].lock().unwrap();
+         if *next < *smallest {
+-            smallest = next;
++            next = smallest;
+         }
+     }
+     *smallest += 1;
+</script></code></pre>
+
+<pre class="terminal" style="font-size: 26pt">
+$ cargo build
+error[E0382]: borrow of moved value: `smallest`
+  --&gt; src/main.rs:11:6
+   |
+4  |     let mut smallest: MutexGuard&lt;i32&gt; = ints[0].lock().unwrap();
+   |         ------------ move occurs because `smallest` [...] does not implement the `Copy` trait
+5  |     for i in 1..ints.len() {
+   |     ---------------------- inside of this loop
+...
+8  |             next = smallest;
+   |                    -------- value moved here, in previous iteration of loop
+...
+11 |     *smallest += 1;
+   |      ^^^^^^^^ value borrowed here after move
+</pre>
 </div>
 </section>
 
