@@ -1403,30 +1403,82 @@ fn main() {
 
 
 <section><!---------------------------------- SLIDE ----------------------------------------------->
-<div class="columns" style="font-size: 32pt">
-<pre><code class="hljs rust"><script type="text/template">
- 
- 
+<div class="rows" style="font-size: 40pt">
+<pre><code class="hljs rust" style="width: 1400px"><script type="text/template">
+
+
+
 fn main() {
     let mut sum = 0;
-    (0..10).into_iter().for_each(|i| {
+    (0..100).into_iter().for_each(|i| {
         sum += i;
     });
     assert_eq!(sum, 4950);
 }
 </script></code></pre>
 
-<pre><code class="hljs rust"><script type="text/template">
+<pre class="terminal" style="visibility: hidden" >
+$ cargo build -q
+error[E0594]: cannot assign to `sum`, as it is a captured variable in a `Fn` closure
+ --> src/main.rs:6:9
+  |
+6 |         sum += i;
+  |         ^^^^^^^^ cannot assign
+</pre>
+</div>
+</section>
+
+
+<section><!---------------------------------- SLIDE ----------------------------------------------->
+<div class="rows" style="font-size: 40pt">
+<pre><code class="hljs rust" data-line-numbers="3,7" style="width: 1400px"><script type="text/template">
+
 use rayon::prelude::*;
 
 fn main() {
     let mut sum = 0;
-    (0..10).into_par_iter().for_each(|i| {
-        sum += i; // error: cannot assign...
+    (0..100).into_par_iter().for_each(|i| {
+        sum += i;
     });
     assert_eq!(sum, 4950);
 }
 </script></code></pre>
+
+<pre class="terminal">
+$ cargo build -q
+error[E0594]: cannot assign to `sum`, as it is a captured variable in a `Fn` closure
+ --> src/main.rs:6:9
+  |
+6 |         sum += i;
+  |         ^^^^^^^^ cannot assign
+</pre>
+</div>
+</section>
+
+
+<section><!---------------------------------- SLIDE ----------------------------------------------->
+<div class="rows" style="font-size: 40pt">
+<pre><code class="hljs rust" data-line-numbers="2,6,8,10" style="width: 1400px"><script type="text/template">
+use std::sync::Mutex;
+use rayon::prelude::*;
+
+fn main() {
+    let sum = Mutex::new(0);
+    (0..100).into_par_iter().for_each(|i| {
+        *sum.lock().unwrap() += i;
+    });
+    assert_eq!(*sum.lock().unwrap(), 4950);
+}
+</script></code></pre>
+
+<pre class="terminal" style="visibility: hidden" >
+$ cargo build -q
+error[E0594]: cannot assign to `sum`, as it is a captured variable in a `Fn` closure
+ --> src/main.rs:6:9
+  |
+6 |         sum += i;
+  |         ^^^^^^^^ cannot assign
+</pre>
 </div>
 </section>
 
