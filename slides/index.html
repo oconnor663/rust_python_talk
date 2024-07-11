@@ -801,6 +801,37 @@ finally:
 
 
 <section><!---------------------------------- SLIDE ----------------------------------------------->
+<div class="rows">
+<pre><code style="font-size: 30pt" class="hljs diff" data-trim><script type="text/template">
+diff --git a/scream_many.py b/scream_many.py
+index cfd26ff..4b6500c 100644
+--- a/scream_many.py
++++ b/scream_many.py
+@@ -15,16 +15,16 @@ class ScreamingOutput:
+ def open_outputs(paths):
+-    outputs = []
+     try:
++        outputs = []
+         for path in paths:
+             outputs.append(ScreamingOutput(path))
+         return outputs
+     except Exception:
+         for output in outputs:
+             output.close()
+         raise
+</script></code></pre>
+
+<pre class="terminal">
+$ pyright scream_many.py
+/home/jacko/why_rust/scream_many.py
+  /home/jacko/why_rust/scream_many.py:28:23 - error: "outputs" is possibly unbound
+1 error, 0 warnings, 0 informations
+</pre>
+</div>
+</section>
+
+
+<section><!---------------------------------- SLIDE ----------------------------------------------->
 <div class="columns">
 <pre><code style="font-size: 17pt" class="hljs rust" data-trim data-line-numbers="2"><script type="text/template">
 use std::io::{self, stdout, Write};
