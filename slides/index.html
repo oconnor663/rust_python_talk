@@ -349,7 +349,7 @@ HELLO WORLD
 
 
 <section><!---------------------------------- SLIDE ----------------------------------------------->
-<pre><code class="hljs rust scrollable" data-trim data-line-numbers="3-6|9-17|19-29|33-35"><script type="text/template">
+<pre><code class="hljs rust scrollable" data-trim data-line-numbers="3-6|19-29|9-17|12"><script type="text/template">
 use std::io::{self, stdout, Write};
 
 enum ScreamingOutput {
@@ -392,7 +392,7 @@ fn main() -> io::Result<()> {
 
 
 <section><!---------------------------------- SLIDE ----------------------------------------------->
-<pre><code class="hljs rust scrollable" data-trim data-line-numbers="34-37"><script type="text/template">
+<pre><code class="hljs rust scrollable" data-trim data-line-numbers="12-15"><script type="text/template">
 use std::io::{self, stdout, Write};
 
 enum ScreamingOutput {
@@ -404,7 +404,10 @@ impl ScreamingOutput {
     fn new(maybe_path: Option<&str>) -> io::Result<ScreamingOutput> {
         match maybe_path {
             Some(path) => {
-                let file = std::fs::File::create(path)?;
+                let file = match std::fs::File::create(path) {
+                    Ok(val) => val,
+                    Err(e) => return Err(e),
+                };
                 Ok(ScreamingOutput::File { file })
             }
             None => Ok(ScreamingOutput::Stdout),
@@ -426,10 +429,7 @@ impl ScreamingOutput {
 
 fn main() -> io::Result<()> {
     let path = std::env::args().nth(1);
-    let mut output = match ScreamingOutput::new(path.as_deref()) {
-        Ok(val) => val,
-        Err(e) => return Err(e),
-    };
+    let mut output = ScreamingOutput::new(path.as_deref())?;
     output.write("hello world\n")?;
     Ok(())
 }
@@ -441,23 +441,25 @@ fn main() -> io::Result<()> {
 <div class="rows">
 <pre><code style="font-size: 30pt" class="hljs diff" data-trim><script type="text/template">
 diff --git a/scream.rs/src/main.rs b/scream.rs/src/main.rs
-index c420906..835b2a1 100644
+index c420906..fc7689c 100644
 --- a/scream.rs/src/main.rs
 +++ b/scream.rs/src/main.rs
-@@ -33,3 +33,3 @@ fn main() -> io::Result<()> {
-     let path = std::env::args().nth(1);
--    let mut output = ScreamingOutput::new(path.as_deref())?;
-+    let mut output = ScreamingOutput::new(path.as_deref());
-     output.write("hello world\n")?;
+@@ -10,5 +10,5 @@ impl ScreamingOutput {
+         match maybe_path {
+             Some(path) => {
+-                let file = std::fs::File::create(path)?;
++                let file = std::fs::File::create(path);
+                 Ok(ScreamingOutput::File { file })
+             }
 </script></code></pre>
 
-<pre class="terminal">
+<pre class="terminal" style="font-size: 28pt">
 $ cargo build -q
-error[E0599]: no method named `write` found for enum `Result` in the current scope
-  --> src/main.rs:35:12
+error[E0308]: mismatched types
+  --&gt; src/main.rs:13:44
    |
-35 |     output.write("hello world\n")?;
-   |            ^^^^^ method not found in `Result<ScreamingOutput, Error>`
+13 |                 Ok(ScreamingOutput::File { file })
+   |                                            ^^^^ expected `File`, found `Result&lt;File, Error&gt;`
    |
 </pre>
 </div>
