@@ -411,8 +411,7 @@ index 94d3414..b8be627 100644
 </script></code></pre>
 
 <pre class="terminal">
-$ cargo build
-   Compiling scream v0.1.0 (/home/jacko/why_rust/scream.rs)
+$ cargo build -q
 error[E0277]: the trait bound `Option&lt;&amp;str&gt;: AsRef&lt;Path&gt;` is not satisfied
    --&gt; src/main.rs:10:42
     |
@@ -448,8 +447,7 @@ index 94d3414..f54689a 100644
 </script></code></pre>
 
 <pre class="terminal">
-$ cargo build
-   Compiling scream v0.1.0 (/home/jacko/why_rust/scream.rs)
+$ cargo build -q
 error[E0609]: no field `file` on type `&amp;mut ScreamingOutput`
   --&gt; src/main.rs:21:14
    |
@@ -480,8 +478,7 @@ index c420906..3fc1109 100644
 </script></code></pre>
 
 <pre class="terminal" style="font-size: 26pt">
-$ cargo build
-   Compiling scream v0.1.0 (/home/jacko/why_rust/scream.rs)
+$ cargo build -q
 error[E0063]: missing field `path` in initializer of `ScreamingOutput`
   --> src/main.rs:17:20
    |
@@ -972,10 +969,10 @@ fn add_one_to_smallest(ints: &[Mutex<i32>]) {
 <section><!---------------------------------- SLIDE ----------------------------------------------->
 <div class="rows">
 <pre><code style="font-size: 26pt" class="hljs diff" data-trim><script type="text/template">
-diff --git a/add_one_to_smallest.rs b/add_one_to_smallest.rs
+diff --git a/add_one_to_smallest/src/main.rs b/add_one_to_smallest/src/main.rs
 index 9a7f193..2cfd33c 100644
---- a/add_one_to_smallest.rs
-+++ b/add_one_to_smallest.rs
+--- a/add_one_to_smallest/src/main.rs
++++ b/add_one_to_smallest/src/main.rs
 @@ -5,7 +5,7 @@ fn add_one_to_smallest(ints: &[Mutex<i32>]) {
      for i in 1..ints.len() {
          let next: MutexGuard<i32> = ints[i].lock().unwrap();
@@ -988,7 +985,7 @@ index 9a7f193..2cfd33c 100644
 </script></code></pre>
 
 <pre class="terminal" style="font-size: 26pt">
-$ cargo build
+$ cargo build -q
 error[E0382]: borrow of moved value: `smallest`
   --&gt; src/main.rs:11:6
    |
@@ -1030,8 +1027,7 @@ index 9a7f193..5686353 100644
 </script></code></pre>
 
 <pre class="terminal" style="font-size: 26pt">
-$ cargo build
-Compiling add_one_to_smallest v0.1.0 (/home/jacko/why_rust/add_one_to_smallest)
+$ cargo build -q
 error[E0515]: cannot return value referencing local variable `smallest`
   --&gt; src/main.rs:12:5
    |
