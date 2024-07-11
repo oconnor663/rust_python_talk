@@ -437,6 +437,33 @@ fn main() -> io::Result<()> {
 
 <section><!---------------------------------- SLIDE ----------------------------------------------->
 <div class="rows">
+<pre><code style="font-size: 30pt" class="hljs diff" data-trim><script type="text/template">
+diff --git a/scream.rs/src/main.rs b/scream.rs/src/main.rs
+index c420906..835b2a1 100644
+--- a/scream.rs/src/main.rs
++++ b/scream.rs/src/main.rs
+@@ -33,3 +33,3 @@ fn main() -> io::Result<()> {
+     let path = std::env::args().nth(1);
+-    let mut output = ScreamingOutput::new(path.as_deref())?;
++    let mut output = ScreamingOutput::new(path.as_deref());
+     output.write("hello world\n")?;
+</script></code></pre>
+
+<pre class="terminal">
+$ cargo build -q
+error[E0599]: no method named `write` found for enum `Result` in the current scope
+  --> src/main.rs:35:12
+   |
+35 |     output.write("hello world\n")?;
+   |            ^^^^^ method not found in `Result<ScreamingOutput, Error>`
+   |
+</pre>
+</div>
+</section>
+
+
+<section><!---------------------------------- SLIDE ----------------------------------------------->
+<div class="rows">
 <pre><code style="font-size: 26pt" class="hljs diff" data-trim><script type="text/template">
 diff --git a/scream.rs/src/main.rs b/scream.rs/src/main.rs
 index 94d3414..b8be627 100644
