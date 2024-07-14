@@ -1083,7 +1083,7 @@ index 9a7f193..3af0b81 100644
 <pre class="terminal" style="font-size: 26pt">
 $ cargo build -q
 warning: value assigned to `smallest` is never read
-  --> src/main.rs:11:5
+  --&gt; src/main.rs:11:5
    |
 11 |     smallest += 1;
    |     ^^^^^^^^
@@ -1097,34 +1097,33 @@ warning: value assigned to `smallest` is never read
 <div class="rows">
 <pre><code style="font-size: 26pt" class="hljs diff" data-trim><script type="text/template">
 diff --git a/add_one_to_smallest/src/main.rs b/add_one_to_smallest/src/main.rs
-index 9a7f193..5686353 100644
+index 9a7f193..372f4be 100644
 --- a/add_one_to_smallest/src/main.rs
 +++ b/add_one_to_smallest/src/main.rs
-@@ -1,15 +1,16 @@
--fn add_one_to_smallest(ints: &[Mutex<i32>]) {
-+fn add_one_to_smallest(ints: &[Mutex<i32>]) -> &i32 {
-     let mut smallest: MutexGuard<i32> = ints[0].lock().unwrap();
+@@ -3,12 +3,12 @@
+ fn add_one_to_smallest(ints: &[Mutex<i32>]) {
+-    let mut smallest: MutexGuard<i32> = ints[0].lock().unwrap();
++    let mut smallest: &mut i32 = &mut *ints[0].lock().unwrap();
      for i in 1..ints.len() {
-         let next: MutexGuard<i32> = ints[i].lock().unwrap();
+-        let next: MutexGuard<i32> = ints[i].lock().unwrap();
++        let next: &mut i32 = &mut *ints[i].lock().unwrap();
          if *next < *smallest {
-             smallest = next;
-         }
-     }
-     *smallest += 1;
-+    &*smallest
- }
 </script></code></pre>
 
 <pre class="terminal" style="font-size: 26pt">
 $ cargo build -q
-error[E0515]: cannot return value referencing local variable `smallest`
-  --&gt; src/main.rs:12:5
+error[E0716]: temporary value dropped while borrowed
+  --&gt; src/main.rs:6:36
    |
-12 |     &amp;*smallest
-   |     ^^--------
-   |     | |
-   |     | `smallest` is borrowed here
-   |     returns a value referencing data owned by the current function
+6  |         let next: &amp;mut i32 = &amp;mut *ints[i].lock().unwrap();
+   |                                    ^^^^^^^^^^^^^^^^^^^^^^^ creates a temporary value...
+...
+10 |     }
+   |     - temporary value is freed at the end of this statement
+11 |     *smallest += 1;
+   |     -------------- borrow later used here
+   |
+   = note: consider using a `let` binding to create a longer lived value
 </pre>
 </div>
 </section>
