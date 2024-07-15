@@ -1,9 +1,9 @@
 use std::sync::{Mutex, MutexGuard};
 
 fn add_one_to_smallest(ints: &[Mutex<i32>]) {
-    let mut smallest: &mut i32 = &mut *ints[0].lock().unwrap();
+    let mut smallest: MutexGuard<i32> = ints[0].lock().unwrap();
     for i in 1..ints.len() {
-        let next: &mut i32 = &mut *ints[i].lock().unwrap();
+        let next: MutexGuard<i32> = ints[i].lock().unwrap();
         if *next < *smallest {
             smallest = next;
         }

@@ -996,6 +996,8 @@ index 9a7f193..372f4be 100644
 -        let next: MutexGuard<i32> = ints[i].lock().unwrap();
 +        let next: &mut i32 = &mut *ints[i].lock().unwrap();
          if *next < *smallest {
+             smallest = next;
+         }
 </script></code></pre>
 
 <pre class="terminal" style="font-size: 26pt">
