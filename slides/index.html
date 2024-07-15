@@ -985,43 +985,6 @@ error[E0382]: borrow of moved value: `smallest`
 <div class="rows">
 <pre><code style="font-size: 26pt" class="hljs diff" data-trim><script type="text/template">
 diff --git a/add_one_to_smallest/src/main.rs b/add_one_to_smallest/src/main.rs
-index 9a7f193..3af0b81 100644
---- a/add_one_to_smallest/src/main.rs
-+++ b/add_one_to_smallest/src/main.rs
-@@ -2,12 +2,12 @@ use std::sync::{Mutex, MutexGuard};
- fn add_one_to_smallest(ints: &[Mutex<i32>]) {
--    let mut smallest: MutexGuard<i32> = ints[0].lock().unwrap();
-+    let mut smallest: i32 = *ints[0].lock().unwrap();
-     for i in 1..ints.len() {
--        let next: MutexGuard<i32> = ints[i].lock().unwrap();
-+        let next: i32 = *ints[i].lock().unwrap();
--        if *next < *smallest {
-+        if next < smallest {
-             smallest = next;
-         }
-     }
--    *smallest += 1;
-+    smallest += 1;
- }
-</script></code></pre>
-
-<pre class="terminal" style="font-size: 26pt">
-$ cargo build -q
-warning: value assigned to `smallest` is never read
-  --&gt; src/main.rs:11:5
-   |
-11 |     smallest += 1;
-   |     ^^^^^^^^
-   |
-</pre>
-</div>
-</section>
-
-
-<section><!---------------------------------- SLIDE ----------------------------------------------->
-<div class="rows">
-<pre><code style="font-size: 26pt" class="hljs diff" data-trim><script type="text/template">
-diff --git a/add_one_to_smallest/src/main.rs b/add_one_to_smallest/src/main.rs
 index 9a7f193..372f4be 100644
 --- a/add_one_to_smallest/src/main.rs
 +++ b/add_one_to_smallest/src/main.rs
