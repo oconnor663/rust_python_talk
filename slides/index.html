@@ -352,7 +352,7 @@ HELLO WORLD
 
 
 <section><!---------------------------------- SLIDE ----------------------------------------------->
-<pre><code class="hljs rust scrollable" data-trim data-line-numbers="3-6|19-29|9-17|12"><script type="text/template">
+<pre><code class="hljs rust scrollable" data-trim data-line-numbers="3-6|19-29|9-17"><script type="text/template">
 use std::io::{self, stdout, Write};
 
 enum ScreamingOutput {
@@ -391,81 +391,6 @@ fn main() -> io::Result<()> {
     Ok(())
 }
 </script></code></pre>
-</section>
-
-
-<section><!---------------------------------- SLIDE ----------------------------------------------->
-<pre><code class="hljs rust scrollable" data-trim data-line-numbers="12-15"><script type="text/template">
-use std::io::{self, stdout, Write};
-
-enum ScreamingOutput {
-    File { file: std::fs::File },
-    Stdout,
-}
-
-impl ScreamingOutput {
-    fn new(maybe_path: Option<&str>) -> io::Result<ScreamingOutput> {
-        match maybe_path {
-            Some(path) => {
-                let file = match std::fs::File::create(path) {
-                    Ok(val) => val,
-                    Err(e) => return Err(e),
-                };
-                Ok(ScreamingOutput::File { file })
-            }
-            None => Ok(ScreamingOutput::Stdout),
-        }
-    }
-
-    fn write(&mut self, string: &str) -> io::Result<()> {
-        let all_caps = string.to_uppercase();
-        match self {
-            ScreamingOutput::File { file } => {
-                file.write_all(all_caps.as_bytes())
-            }
-            ScreamingOutput::Stdout => {
-                stdout().write_all(all_caps.as_bytes())
-            }
-        }
-    }
-}
-
-fn main() -> io::Result<()> {
-    let path = std::env::args().nth(1);
-    let mut output = ScreamingOutput::new(path.as_deref())?;
-    output.write("hello world\n")?;
-    Ok(())
-}
-</script></code></pre>
-</section>
-
-
-<section><!---------------------------------- SLIDE ----------------------------------------------->
-<div class="rows">
-<pre><code style="font-size: 30pt" class="hljs diff" data-trim><script type="text/template">
-diff --git a/scream.rs/src/main.rs b/scream.rs/src/main.rs
-index c420906..fc7689c 100644
---- a/scream.rs/src/main.rs
-+++ b/scream.rs/src/main.rs
-@@ -10,5 +10,5 @@ impl ScreamingOutput {
-         match maybe_path {
-             Some(path) => {
--                let file = std::fs::File::create(path)?;
-+                let file = std::fs::File::create(path);
-                 Ok(ScreamingOutput::File { file })
-             }
-</script></code></pre>
-
-<pre class="terminal" style="font-size: 28pt">
-$ cargo build -q
-error[E0308]: mismatched types
-  --&gt; src/main.rs:13:44
-   |
-13 |                 Ok(ScreamingOutput::File { file })
-   |                                            ^^^^ expected `File`, found `Result&lt;File, Error&gt;`
-   |
-</pre>
-</div>
 </section>
 
 
