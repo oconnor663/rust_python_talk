@@ -1462,51 +1462,26 @@ error[E0594]: cannot assign to `sum`, as it is a captured variable in a `Fn` clo
 
 <section><!---------------------------------- SLIDE ----------------------------------------------->
 <div class="columns">
-<pre><code style="font-size: 26pt" class="hljs python" data-trim><script type="text/template">
+<pre><code style="font-size: 30pt" class="hljs python" data-trim><script type="text/template">
 #! /usr/bin/env python3
 
 import argparse
-import re
-import urllib.request
 
 parser = argparse.ArgumentParser()
-parser.add_argument("url")
-parser.add_argument("regex")
-parser.add_argument("-i", "--insensitive", action="store_true")
+parser.add_argument("words", nargs="*")
+parser.add_argument("-n", action="store_true")
 
 args = parser.parse_args()
-flags = 0
-if args.insensitive:
-    flags |= re.IGNORECASE
-regex = re.compile(args.regex, flags)
-with urllib.request.urlopen(args.url) as response:
-    for line in response.read().splitlines():
-        line = line.decode()
-        if regex.search(line):
-            print(line.strip())
+print(" ".join(args.words).upper(), end='')
+if not args.n:
+    print()
 </script></code></pre>
 
-<pre class="terminal" style="font-size: 20pt">
-$ ./script.py --help
-usage: script.py [-h] [-i] url regex
-
-positional arguments:
-  url
-  regex
-
-options:
-  -h, --help         show this help message and exit
-  -i, --insensitive
-
-$ ./script.py https://example.com example
-&lt;p&gt;This domain is for use in illustrative examples...
-&lt;p&gt;&lt;a href=&quot;https://www.iana.org/domains/example&quot;&gt;...
-
-$ ./script.py https://example.com example -i
-&lt;title&gt;Example Domain&lt;/title&gt;
-&lt;h1&gt;Example Domain&lt;/h1&gt;
-&lt;p&gt;This domain is for use in illustrative examples...
-&lt;p&gt;&lt;a href=&quot;https://www.iana.org/domains/example&quot;&gt;...
+<pre class="terminal">
+$ ./echo.py hello world
+HELLO WORLD
+$ ./echo.py hello world -n
+HELLO WORLD$ ▯
 </pre>
 </div>
 </section>
@@ -1514,114 +1489,41 @@ $ ./script.py https://example.com example -i
 
 <section><!---------------------------------- SLIDE ----------------------------------------------->
 <div class="columns">
-<pre><code style="font-size: 21pt" class="hljs rust" data-trim><script type="text/template">
+<pre><code style="font-size: 30pt" class="hljs rust" data-trim><script type="text/template">
 #!/usr/bin/env -S cargo +nightly -Zscript -q
 ---
 [package]
 edition = "2021"
 
 [dependencies]
-anyhow = "1.0.86"
 clap = { version = "4.2", features = ["derive"] }
-regex = "1.10.5"
-ureq = "2.10.0"
 ---
 
 use clap::Parser;
-use std::io::prelude::*;
-use std::io::BufReader;
 
 #[derive(Parser)]
 struct Args {
-    url: String,
-    regex: String,
-    #[arg(short, long)]
-    insensitive: bool,
+    words: Vec<String>,
+    #[arg(short('n'))]
+    no_newline: bool,
 }
 
-fn main() -> anyhow::Result<()> {
+fn main() {
     let args = Args::parse();
-    let regex = regex::RegexBuilder::new(&args.regex)
-        .case_insensitive(args.insensitive)
-        .build()?;
-    let response = ureq::get(&args.url).call()?.into_reader();
-    for line in BufReader::new(response).lines() {
-        let line = line?;
-        if regex.is_match(&line) {
-            println!("{}", line.trim());
-        }
+    print!("{}", args.words.join(" ").to_uppercase());
+    if !args.no_newline {
+        println!();
     }
-    Ok(())
 }
 </script></code></pre>
 
-<pre class="terminal" style="font-size: 20pt">
-$ ./script.rs --help
-Usage: script [OPTIONS] &lt;URL&gt; &lt;REGEX&gt;
-
-Arguments:
-  &lt;URL&gt;
-  &lt;REGEX&gt;
-
-Options:
-  -i, --insensitive
-  -h, --help         Print help
-
-$ ./script.rs https://example.com example
-&lt;p&gt;This domain is for use in illustrative examples...
-&lt;p&gt;&lt;a href=&quot;https://www.iana.org/domains/example&quot;&gt;...
-
-$ ./script.rs https://example.com example -i
-&lt;title&gt;Example Domain&lt;/title&gt;
-&lt;h1&gt;Example Domain&lt;/h1&gt;
-&lt;p&gt;This domain is for use in illustrative examples...
-&lt;p&gt;&lt;a href=&quot;https://www.iana.org/domains/example&quot;&gt;...
+<pre class="terminal">
+$ ./echo.rs hello world
+HELLO WORLD
+$ ./echo.rs hello world -n
+HELLO WORLD$ ▯
 </pre>
 </div>
-</section>
-
-
-<section><!---------------------------------- SLIDE ----------------------------------------------->
-<pre><code class="hljs rust scrollable" data-trim data-line-numbers="1|2-11|13-23|25-38"><script type="text/template">
-#!/usr/bin/env -S cargo +nightly -Zscript -q
----
-[package]
-edition = "2021"
-
-[dependencies]
-anyhow = "1.0.86"
-clap = { version = "4.2", features = ["derive"] }
-regex = "1.10.5"
-ureq = "2.10.0"
----
-
-use clap::Parser;
-use std::io::prelude::*;
-use std::io::BufReader;
-
-#[derive(Parser)]
-struct Args {
-    url: String,
-    regex: String,
-    #[arg(short, long)]
-    insensitive: bool,
-}
-
-fn main() -> anyhow::Result<()> {
-    let args = Args::parse();
-    let regex = regex::RegexBuilder::new(&args.regex)
-        .case_insensitive(args.insensitive)
-        .build()?;
-    let response = ureq::get(&args.url).call()?.into_reader();
-    for line in BufReader::new(response).lines() {
-        let line = line?;
-        if regex.is_match(&line) {
-            println!("{}", line.trim());
-        }
-    }
-    Ok(())
-}
-</script></code></pre>
 </section>
 
 

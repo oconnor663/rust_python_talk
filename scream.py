@@ -1,4 +1,11 @@
+#! /usr/bin/env python3
+
+import argparse
 import sys
+
+parser = argparse.ArgumentParser()
+parser.add_argument("paths", nargs="*")
+parser.add_argument("-m", "--message", default="hello world\n")
 
 class ScreamingOutput:
     def __init__(self, path=None):
@@ -14,9 +21,10 @@ class ScreamingOutput:
         else:
             sys.stdout.write(all_caps)
 
-if len(sys.argv) > 1:
-    output = ScreamingOutput(sys.argv[1])
+args = parser.parse_args()
+if args.paths:
+    outputs = [ScreamingOutput(path) for path in args.paths]
 else:
-    output = ScreamingOutput()
-
-output.write("hello world\n")
+    outputs = [ScreamingOutput()]
+for output in outputs:
+    output.write(args.message)
