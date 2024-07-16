@@ -554,13 +554,44 @@ fn main() -> io::Result<()> {
 
 
 <section><!---------------------------------- SLIDE ----------------------------------------------->
+<div class="rows">
+<pre><code style="font-size: 40pt" class="hljs rust" data-trim><script type="text/template">
+use std::fs::File;
+use std::io;
+use std::os::fd::AsRawFd;
+
+fn look_at_file_descriptors() -> io::Result<()> {
+    let file1 = File::open("/dev/null")?;
+    let file2 = File::open("/dev/null")?;
+    println!("{:?} {:?}", file1.as_raw_fd(), file2.as_raw_fd());
+    Ok(())
+}
+
+fn main() -> io::Result<()> {
+    look_at_file_descriptors()?;
+    look_at_file_descriptors()?;
+    look_at_file_descriptors()?;
+    Ok(())
+}
+</script></code></pre>
+
+<pre class="terminal" style="font-size: 50pt; position: absolute; bottom: 100px; right: 200px">
+$ cargo run -q
+3 4
+3 4
+3 4
+</pre>
+</div>
+</section>
+
+
+<section><!---------------------------------- SLIDE ----------------------------------------------->
 <div class="columns">
 <pre><code style="font-size: 40pt" class="hljs python" data-trim><script type="text/template">
 def look_at_file_descriptors():
-    output1 = ScreamingOutput("/dev/null")
-    output2 = ScreamingOutput("/dev/null")
-    print(output1.file.fileno(),
-          output2.file.fileno())
+    file1 = open("/dev/null")
+    file2 = open("/dev/null")
+    print(file1.fileno(), file2.fileno())
 
 look_at_file_descriptors()
 look_at_file_descriptors()
@@ -595,14 +626,13 @@ $ micropython look.py
 
 <section><!---------------------------------- SLIDE ----------------------------------------------->
 <div class="columns">
-<pre><code style="font-size: 40pt" class="hljs python" data-trim data-line-numbers="6-9"><script type="text/template">
+<pre><code style="font-size: 40pt" class="hljs python" data-trim data-line-numbers="5-8"><script type="text/template">
 def look_at_file_descriptors():
-    output1 = ScreamingOutput("/dev/null")
-    output2 = ScreamingOutput("/dev/null")
-    print(output1.file.fileno(),
-          output2.file.fileno())
-    silly_map1 = {"output": output1}
-    silly_map2 = {"output": output2}
+    file1 = open("/dev/null")
+    file2 = open("/dev/null")
+    print(file1.fileno(), file2.fileno())
+    silly_map1 = {"file": file1}
+    silly_map2 = {"file": file2}
     silly_map1["other_map"] = silly_map2
     silly_map2["other_map"] = silly_map1
 
@@ -1455,7 +1485,10 @@ error[E0594]: cannot assign to `sum`, as it is a captured variable in a `Fn` clo
 
 <section><!---------------------------------- SLIDE ----------------------------------------------->
 <div class="rows">
-<h1>Scripts</h1>
+<div>
+<h1>Standalone Scripts</h1>
+<h2>painless dependencies</h2>
+</div>
 </div>
 </section>
 
