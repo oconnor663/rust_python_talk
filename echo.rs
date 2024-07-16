@@ -1,11 +1,8 @@
-#!/usr/bin/env -S cargo +nightly -Zscript
----
-[package]
-edition = "2021"
-
-[dependencies]
-clap = { version = "4.2", features = ["derive"] }
----
+#!/usr/bin/env rust-script
+//! ```cargo
+//! [dependencies]
+//! clap = { version = "4.2", features = ["derive"] }
+//! ```
 
 use clap::Parser;
 

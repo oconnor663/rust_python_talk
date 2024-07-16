@@ -1490,7 +1490,46 @@ HELLO WORLD$ ▯
 <section><!---------------------------------- SLIDE ----------------------------------------------->
 <div class="columns">
 <pre><code style="font-size: 30pt" class="hljs rust" data-trim><script type="text/template">
-#!/usr/bin/env -S cargo +nightly -Zscript -q
+#!/usr/bin/env rust-script
+//! ```cargo
+//! [dependencies]
+//! clap = { version = "4.2", features = ["derive"] }
+//! ```
+
+use clap::Parser;
+
+#[derive(Parser)]
+struct Args {
+    words: Vec<String>,
+    #[arg(short('n'))]
+    no_newline: bool,
+}
+
+fn main() {
+    let args = Args::parse();
+    print!("{}", args.words.join(" ").to_uppercase());
+    if !args.no_newline {
+        println!();
+    }
+}
+</script></code></pre>
+
+<pre class="terminal">
+$ cargo install rust-script
+
+$ ./echo.rs hello world
+HELLO WORLD
+$ ./echo.rs hello world -n
+HELLO WORLD$ ▯
+</pre>
+</div>
+</section>
+
+
+<section><!---------------------------------- SLIDE ----------------------------------------------->
+<div class="columns">
+<pre><code style="font-size: 30pt" class="hljs rust" data-trim><script type="text/template">
+#!/usr/bin/env cargo
 ---
 [package]
 edition = "2021"
