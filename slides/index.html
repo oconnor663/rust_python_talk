@@ -956,17 +956,34 @@ fn main() -> io::Result<()> {
 <section><!---------------------------------- SLIDE ----------------------------------------------->
 <div class="columns">
 <pre><code style="font-size: 40pt" class="hljs rust" data-trim><script type="text/template">
+fn add_one_to_smallest(ints: &mut [i32]) {
+    let mut smallest_index = 0;
+    for next_index in 1..ints.len() {
+        if ints[next_index] < ints[smallest_index] {
+            smallest_index = next_index;
+        }
+    }
+    ints[smallest_index] += 1;
+}
+</script></code></pre>
+</div>
+</section>
+
+
+<section><!---------------------------------- SLIDE ----------------------------------------------->
+<div class="columns">
+<pre><code style="font-size: 40pt" class="hljs rust" data-trim><script type="text/template">
 use std::sync::{Mutex, MutexGuard};
 
 fn add_one_to_smallest(ints: &[Mutex<i32>]) {
-    let mut smallest: MutexGuard<i32> = ints[0].lock().unwrap();
+    let mut smallest_guard: MutexGuard<i32> = ints[0].lock().unwrap();
     for i in 1..ints.len() {
-        let next: MutexGuard<i32> = ints[i].lock().unwrap();
-        if *next < *smallest {
-            smallest = next;
+        let next_guard: MutexGuard<i32> = ints[i].lock().unwrap();
+        if *next_guard < *smallest_guard {
+            smallest_guard = next_guard;
         }
     }
-    *smallest += 1;
+    *smallest_guard += 1;
 }
 </script></code></pre>
 </div>
@@ -976,36 +993,34 @@ fn add_one_to_smallest(ints: &[Mutex<i32>]) {
 <section><!---------------------------------- SLIDE ----------------------------------------------->
 <div class="rows">
 <pre><code style="font-size: 26pt" class="hljs diff" data-trim><script type="text/template">
-diff --git a/add_one_to_smallest/src/main.rs b/add_one_to_smallest/src/main.rs
-index 9a7f193..2cfd33c 100644
---- a/add_one_to_smallest/src/main.rs
-+++ b/add_one_to_smallest/src/main.rs
-@@ -5,7 +5,7 @@ fn add_one_to_smallest(ints: &[Mutex<i32>]) {
+diff --git a/add_one_to_smallest/src/lib.rs b/add_one_to_smallest/src/lib.rs
+index 4dc6488..0c36788 100644
+--- a/add_one_to_smallest/src/lib.rs
++++ b/add_one_to_smallest/src/lib.rs
+@@ -7,7 +7,7 @@ fn add_one_to_smallest(ints: &[Mutex<i32>]) {
      for i in 1..ints.len() {
-         let next: MutexGuard<i32> = ints[i].lock().unwrap();
-         if *next < *smallest {
--            smallest = next;
-+            next = smallest;
+         let next_guard: MutexGuard<i32> = ints[i].lock().unwrap();
+         if *next_guard < *smallest_guard {
+-            smallest_guard = next_guard;
++            next_guard = smallest_guard;
          }
      }
-     *smallest += 1;
+     *smallest_guard += 1;
 </script></code></pre>
 
 <pre class="terminal" style="font-size: 26pt">
 $ cargo build -q
-error[E0382]: borrow of moved value: `smallest`
-  --&gt; src/main.rs:11:6
+error[E0382]: borrow of moved value: `smallest_guard`
+  --> src/lib.rs:13:6
    |
-4  |     let mut smallest: MutexGuard&lt;i32&gt; = ints[0].lock().unwrap();
-   |         ------------ move occurs because `smallest` [...] does not implement the `Copy` trait
-5  |     for i in 1..ints.len() {
+7  |     for i in 1..ints.len() {
    |     ---------------------- inside of this loop
 ...
-8  |             next = smallest;
-   |                    -------- value moved here, in previous iteration of loop
+10 |             next_guard = smallest_guard;
+   |                          -------------- value moved here, in previous iteration of loop
 ...
-11 |     *smallest += 1;
-   |      ^^^^^^^^ value borrowed here after move
+13 |     *smallest_guard += 1;
+   |      ^^^^^^^^^^^^^^ value borrowed here after move
 </pre>
 </div>
 </section>
@@ -1014,34 +1029,34 @@ error[E0382]: borrow of moved value: `smallest`
 <section><!---------------------------------- SLIDE ----------------------------------------------->
 <div class="rows">
 <pre><code style="font-size: 26pt" class="hljs diff" data-trim><script type="text/template">
-diff --git a/add_one_to_smallest/src/main.rs b/add_one_to_smallest/src/main.rs
-index 9a7f193..372f4be 100644
---- a/add_one_to_smallest/src/main.rs
-+++ b/add_one_to_smallest/src/main.rs
-@@ -3,12 +3,12 @@
+diff --git a/add_one_to_smallest/src/lib.rs b/add_one_to_smallest/src/lib.rs
+index 4dc6488..6f180c5 100644
+--- a/add_one_to_smallest/src/lib.rs
++++ b/add_one_to_smallest/src/lib.rs
+@@ -3,9 +3,9 @@
  fn add_one_to_smallest(ints: &[Mutex<i32>]) {
--    let mut smallest: MutexGuard<i32> = ints[0].lock().unwrap();
-+    let mut smallest: &mut i32 = &mut *ints[0].lock().unwrap();
+-    let mut smallest_guard: MutexGuard<i32> = ints[0].lock().unwrap();
++    let mut smallest_guard: &mut i32 = &mut *ints[0].lock().unwrap();
      for i in 1..ints.len() {
--        let next: MutexGuard<i32> = ints[i].lock().unwrap();
-+        let next: &mut i32 = &mut *ints[i].lock().unwrap();
-         if *next < *smallest {
-             smallest = next;
+-        let next_guard: MutexGuard<i32> = ints[i].lock().unwrap();
++        let next_guard: &mut i32 = &mut *ints[i].lock().unwrap();
+         if *next_guard < *smallest_guard {
+             smallest_guard = next_guard;
          }
 </script></code></pre>
 
 <pre class="terminal" style="font-size: 26pt">
 $ cargo build -q
 error[E0716]: temporary value dropped while borrowed
-  --&gt; src/main.rs:6:36
+  --&gt; src/lib.rs:8:42
    |
-6  |         let next: &amp;mut i32 = &amp;mut *ints[i].lock().unwrap();
-   |                                    ^^^^^^^^^^^^^^^^^^^^^^^ creates a temporary value...
+8  |         let next_guard: &amp;mut i32 = &amp;mut *ints[i].lock().unwrap();
+   |                                          ^^^^^^^^^^^^^^^^^^^^^^^ creates a temporary value...
 ...
-10 |     }
+12 |     }
    |     - temporary value is freed at the end of this statement
-11 |     *smallest += 1;
-   |     -------------- borrow later used here
+13 |     *smallest_guard += 1;
+   |     -------------------- borrow later used here
    |
    = note: consider using a `let` binding to create a longer lived value
 </pre>
