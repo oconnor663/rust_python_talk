@@ -198,7 +198,7 @@ help us write clean code and catch bugs
 
 <section><!---------------------------------- SLIDE ----------------------------------------------->
 <div class="columns">
-<pre><code style="font-size: 34pt" class="hljs python" data-trim data-line-numbers="2|3-8|10-15|17-22"><script type="text/template">
+<pre><code style="font-size: 34pt" class="hljs python" data-trim data-line-numbers="|2"><script type="text/template">
 import sys
 
 class ScreamingOutput:
@@ -232,6 +232,34 @@ $ cat /tmp/out
 HELLO WORLD
 </pre>
 </div>
+</section>
+
+
+<section><!---------------------------------- SLIDE ----------------------------------------------->
+<pre><code class="hljs python scrollable" data-trim data-line-numbers="3-8|10-15|17-22"><script type="text/template">
+import sys
+
+class ScreamingOutput:
+    def __init__(self, path=None):
+        if path is not None:
+            self.file = open(path, "w")
+        else:
+            self.file = None
+
+    def write(self, string):
+        all_caps = string.upper()
+        if self.file is not None:
+            self.file.write(all_caps)
+        else:
+            sys.stdout.write(all_caps)
+
+if len(sys.argv) > 1:
+    output = ScreamingOutput(sys.argv[1])
+else:
+    output = ScreamingOutput()
+
+output.write("hello world\n")
+</script></code></pre>
 </section>
 
 
